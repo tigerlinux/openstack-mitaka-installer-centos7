@@ -1,0 +1,279 @@
+OpenStack and OpenVSwitch in VLAN mode with "provider" networks and server net-interfaces in trunk mode.
+
+Scenario:
+
+eth1 Interface in trunk mode passing VLAN traffic.
+First VLAN asigned to the trunk-mode port: vlan10 (tag=10)
+NOTE: This assumes the port-switch where the server is plugged should be configured in trunk mode, and passing VLAN traffic (for this scenario, tag=10).
+
+Procedure:
+
+1.- Ensure the integration switch is created. Otherwise, create with:
+
+ovs-vsctl add-br br-int
+
+2.- Create the br-eth1 ovs switch and assign it to port eth1. Also create the eth1-10 vlan subinterface for our VLAN10. That's the real trick with OpenStack and VLAN's:
+
+ovs-vsctl add-br br-eth1
+ovs-vsctl add-port br-eth1 eth1
+
+Those last two commands create the ovs switch and assign it to eth1
+
+ovs-vsctl add-port br-eth1 eth1-10 tag=10 -- set interface eth1-10 type=internal
+
+This last step efectivelly makes the "bridge" between the vlan-tagged packets and the OpenStack Network Domain. This specific command needs to be executed for every vlan assigned to the eth1 port (br-eth1 ovs switch) that will be used by OpenStack (neutron more specifically).
+
+So in general terms:
+
+ovs-vsctl add-port br-eth1 eth1-VLAN_ID tag=VLAN_ID -- set interface eth1-VLAN_ID type=internal
+
+3.- Server interfaces.
+
+Following, and adjusted to our sample scenario, you will find how to configure the network interfaces at O/S level for ubuntu/debian and centos/rhel:
+
+If you are using ubuntu or debian:
+
+For older OpenVSwitch versions (pre-liberty):
+
+File: /etc/network/interfaces:
+
+auto eth1
+iface eth1 inet manual
+pre-up /sbin/modprobe 8021q
+up ifconfig $IFACE  up
+up ip link $IFACE promisc on
+down ifconfig $IFACE down
+
+# Integration bridge
+auto br-int
+iface br-int inet manual
+up ifconfig $IFACE 0.0.0.0 up
+up ip link set $IFACE promisc on
+up echo 1 >/proc/sys/net/ipv6/conf/$IFACE/disable_ipv6
+down ip link set $IFACE promisc off
+down ifconfig $IFACE down
+#
+# Main Bridge
+auto br-eth1
+iface br-eth1 inet manual
+pre-up /sbin/ifconfig eth1 up
+up ifconfig $IFACE  up
+up ip link $IFACE promisc on
+up echo 1 >/proc/sys/net/ipv6/conf/$IFACE/disable_ipv6
+down ip link set $IFACE promisc off
+down ifconfig $IFACE down
+
+auto eth1-10
+iface eth1-10 inet static
+address 172.16.10.1
+netmask 255.255.255.0
+broadcast 172.16.10.255
+
+
+For newer OpenVSwitch versions (liberty):
+
+File: /etc/network/interfaces:
+
+# Integration Bridge
+allow-ovs br-int
+iface br-int inet static
+        ovs_type OVSBridge
+        address 0.0.0.0
+
+# Main Bridge
+allow-ovs br-eth1
+iface br-eth1 inet static
+        address 0.0.0.0
+        ovs_type OVSBridge
+        ovs_ports eth1
+
+# Main bridge physical interface
+allow-br-eth1 eth1
+iface eth1 inet manual
+        ovs_bridge br-eth1
+        ovs_type OVSPort
+
+# Vlan OVS Port eth1-10
+allow-br-eth1 eth1-10
+iface eth1-10 inet static
+	ovs_bridge br-eth1
+	ovs_type OVSIntPort
+	ovs_options tag=10
+	address 172.16.10.1
+	netmask 255.255.255.0
+
+
+If you are using centos/rhel:
+
+/etc/sysconfig/network-scripts/ifcfg-br-int:
+
+DEVICE=br-int
+ONBOOT=yes
+BOOTPROTO=none
+DEVICETYPE=ovs
+TYPE=OVSBridge
+
+/etc/sysconfig/network-scripts/ifcfg-eth1:
+
+DEVICE=eth1
+TYPE=OVSPort
+DEVICETYPE=ovs
+OVS_BRIDGE=br-eth1
+ONBOOT=yes
+BOOTPROTO=none
+
+/etc/sysconfig/network-scripts/ifcfg-br-eth1:
+
+DEVICE=br-eth1
+ONBOOT=yes
+BOOTPROTO=none
+DEVICETYPE=ovs
+TYPE=OVSBridge
+
+/etc/sysconfig/network-scripts/ifcfg-eth1-10
+
+VLAN=yes
+VLAN_NAME_TYPE=VLAN_PLUS_VID_NO_PAD
+PHYSDEV=eth1
+DEVICE=eth1-10
+BOOTPROTO=static
+ONBOOT=yes
+IPADDR=172.16.10.1
+NETMASK=255.255.255.0
+
+
+4.- Changes in Neutron:
+
+In neutron, we proceed to create the neutron-network with the following command... we will name our physical network "opennet", and our specific net linked with VLAN 10 "net-vlan-10":
+
+neutron net-create net-vlan-10 \
+--shared \
+--provider:network_type vlan \
+--provider:physical_network opennet \
+--provider:segmentation_id 10 \
+--router:external
+
+the "segmentation_id" value must contain the VLAN tag (for our scenary, the value is 10)
+
+ML2 neutron plugin must be reconfigured accordingly:
+
+File: /etc/neutron/plugins/ml2/ml2_conf.ini
+
+[ml2]
+type_drivers = vlan
+mechanism_drivers = openvswitch,l2population
+tenant_network_types = vlan
+
+[ml2_type_vlan]
+network_vlan_ranges = opennet:10:100
+
+[ovs]
+enable_tunneling = False
+network_vlan_ranges = opennet:10:100
+bridge_mappings = opennet:br-eth1
+
+The "network_vlan_ranges" parameter include the network (or networks) and it's possible vlan ranges that will be used by openstack. The name used here (opennet) is the same used with the "neutron net-create" in the "provider:physical_network" parameter.
+
+NOTE: Restart your node after those changes are completed.
+
+Again, in general terms:
+
+a.- For every vlan assigned to openstack, the openvswitch sub-interface must be created:
+
+ovs-vsctl add-port br-ethX ethX-VLAN_ID tag=VLAN_ID -- set interface ethX-VLAN_ID type=internal
+
+b.- And for every new vlan assigned to OpenStack:
+
+neutron net-create NEW_NETWORK \
+--shared \
+--provider:network_type vlan \
+--provider:physical_network PHYSICAL_NETWORK_NAME \
+--provider:segmentation_id NEW_VLAN_ID \
+--router:external
+
+(Note: Only the "Admin" tenant can use --router:external. Do not include this option if you are not the Admin tenant)
+
+
+Now our scenario with more networks:
+
+Let's extend our scenario, this time with two physical networks (two interfaces dedicated to OpenStack) and 4 vlan's.
+
+OpenStack only allows one "physical_network" per bridge/interface, but you can have multiple interfaces in your nodes, and every interface with it's own switch and assigned vlan's.
+
+Sample: Now, our server has two interfaces for OpenStack VM's (eth1 and eth2) and every interface with a switch assigned to it (br-eth1 and br-eth2):
+
+Again:
+
+ovs-vsctl add-br br-int (just a reminder)
+
+ovs-vsctl add-br br-eth1
+ovs-vsctl add-port br-eth1 eth1
+
+ovs-vsctl add-br br-eth2
+ovs-vsctl add-port br-eth1 eth2
+
+This will create the ovs switches:
+
+br-eth1
+br-eth2
+
+Also, you proceed to create the vlan subinterfaces in ovs, assuming your eth1 will use tags 30 and 50 for eth1 and tags 10 and 20 for eth2:
+
+ovs-vsctl add-port br-eth1 eth1-30 tag=30 -- set interface eth1-30 type=internal
+ovs-vsctl add-port br-eth1 eth1-50 tag=10 -- set interface eth1-50 type=internal
+ovs-vsctl add-port br-eth2 eth2-10 tag=10 -- set interface eth2-10 type=internal
+ovs-vsctl add-port br-eth2 eth2-20 tag=20 -- set interface eth2-20 type=internal
+
+NOTE: Remember to make the proper changes in the O/S as described in part 3 "Network Interfaces", as you will have to provide server configuration for the interfaces eth1-30, eth1-50, eth2-10 and eth2-20.
+
+Then, we proceed to create Neutron Networks. This time, we'll name our physical networks "networkinteth1" (for the net in br-eth1) and "networkinteth2" (for the net in br-eth2):
+
+neutron net-create net-vlan-10 \
+--shared --provider:network_type vlan \
+--provider:physical_network networkinteth2 \
+--provider:segmentation_id 10 \
+--router:external
+
+neutron net-create net-vlan-20 \
+--shared --provider:network_type vlan \
+--provider:physical_network networkinteth2 \
+--provider:segmentation_id 20 \
+--router:external
+
+neutron net-create net-vlan-30 \
+--shared --provider:network_type vlan \
+--provider:physical_network networkinteth1 \
+--provider:segmentation_id 30 \
+--router:external
+
+neutron net-create net-vlan-50 \
+--shared --provider:network_type vlan \
+--provider:physical_network networkinteth1 \
+--provider:segmentation_id 50 \
+--router:external
+
+Those commands create the vlan networks "net-vlan-10", "net-vlan-20", "net-vlan-30" and "net-vlan-50", and also the physical networks "networkineth1" and "networkineth2"
+
+Finally, we need to reconfigure ML2 plugin so the mappings between physical networks and ovs bridges are correctly setup:
+
+File: /etc/neutron/plugins/ml2/ml2_conf.ini
+
+[ml2]
+type_drivers = vlan
+mechanism_drivers = openvswitch,l2population
+tenant_network_types = vlan
+
+[ml2_type_vlan]
+network_vlan_ranges = networkinteth1:10:100,networkinteth2:10:100
+
+[ovs]
+enable_tunneling = False
+network_vlan_ranges = networkinteth1:10:100,networkinteth2:10:100
+bridge_mappings = networkinteth1:br-eth1,networkinteth2:br-eth2
+
+Then, you should restart your node services in order to apply the new configuration.
+
+IMPORTANT NOTE: You MUST apply your vlan configuration to all active nodes on the same OpenStack cloud, including your controller or network-node server.
+
+END.-
+

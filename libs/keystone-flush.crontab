@@ -1,0 +1,9 @@
+#
+# Unattended installer for OpenStack.
+# Reynaldo R. Martinez P.
+# E-Mail: TigerLinux@Gmail.com
+#
+# Keystone Cleaning Crontab
+#
+
+02 */1 * * * root /usr/local/bin/openstack-keystone-tokenflush.sh > /var/log/keystone-tokens-flush.log

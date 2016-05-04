@@ -1,0 +1,17 @@
+#######################################################
+# Unattended installer for OpenStack.
+# Reynaldo R. Martinez P.
+# E-Mail: TigerLinux@Gmail.com
+#
+# Basic SNMP Access
+#######################################################
+com2sec public  0.0.0.0/0	OpenStack
+com2sec public  localhost	OpenStack
+group public v1 public
+group public v2c public
+view all included .1
+access public "" any noauth prefix all none none
+#
+#
+#
+

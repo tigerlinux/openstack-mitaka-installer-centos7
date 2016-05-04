@@ -1,0 +1,9 @@
+#
+# Unattended installer for OpenStack.
+# Reynaldo R. Martinez P.
+# E-Mail: TigerLinux@Gmail.com
+#
+# Ceilometer Expirer Crontab
+#
+
+45 01 * * * root /usr/bin/ceilometer-expirer --config-file /etc/ceilometer/ceilometer.conf > /var/log/ceilometer-last-expire.log 2>&1

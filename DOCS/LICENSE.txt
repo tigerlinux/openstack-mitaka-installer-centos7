@@ -1,0 +1,21 @@
+Unattended OpenStack Installer
+Reynaldo R. Martinez P.
+E-Mail: TigerLinux@Gmail.com
+
+Released under GPL V3
+
+This piece of code and all its components have been released under the GPL V3.
+
+You can use, modify, redistribute, and especially to "improve" those tools provided 
+you share your modifications to the Free Software community (especially the OpenStack
+community) and in turn indicate that modifications were based on my original work.
+
+If you make improvements on this set of scripts whose sole function is to help
+those who need or want to learn from OpenStack, please share the information
+as other projects (devstack, packstack) have done with the whole community.
+
+
+All other components downloaded from this set of scripts (OpenStack and all
+its modules, linux dependencies, etc.) are under their own licenses.
+
+END.-

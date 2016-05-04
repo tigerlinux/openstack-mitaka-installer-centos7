@@ -1,0 +1,64 @@
+#
+# Unattended installer for OpenStack.
+# Reynaldo R. Martinez P.
+# E-Mail: TigerLinux@Gmail.com
+#
+# Those services can be montitored into PRTABLE
+#
+proc apache2
+proc memcached
+proc ovs-vswitchd
+proc keystone-all
+proc glance-api
+proc glance-registry
+proc cinder-api
+proc cinder-volume
+proc nova-api
+proc nova-cert
+proc nova-scheduler
+proc nova-conductor
+proc nova-novncproxy
+proc nova-compute
+proc ceilometer-api
+proc mongod
+proc mysqld
+proc mysql
+proc postgres
+
+#
+# SNMP OID's
+#
+
+extend .1.20 node-cpu-monitor /bin/cat /var/tmp/node-cpu.txt
+extend .1.21 node-ram-monitor /bin/cat /var/tmp/node-memory.txt
+extend .1.22 vm-number-by-states /bin/cat /var/tmp/vm-number-by-states.txt
+extend .1.24 vm-space-glance-and-nova /bin/cat /var/tmp/vm-disk.txt
+
+#
+# Variables Explanation
+#
+# Variables into .1.20 branch - four variables:
+#	- Variable 1: CPU-User usage percent
+#	- Variable 2: CPU-System usage percent
+#	- Variable 3: CPU-Idle remaining percent
+#	- Variable 4: CPU on W-I/O (Waiting for Input/Output) usage percent
+#
+# Variables into .1.21 branch
+#	- Variable 1: Used Buffers (Bytes)
+#	- Variable 2: Used Cache (Bytes)
+#	- Variable 3: Other memory kind used (Bytes)
+#	- Variable 4: Free physical memory (Bytes)
+#	- Variable 5: Asigned SWAP (Bytes)
+#	- Variable 6: Used SWAP (Bytes)
+#
+# Variables into .1.22 branch
+#	- Variable 1: VM's in "running" state
+#	- Variable 2: VM's in "shut off" state
+#	- Variable 3: VM's in "paused" state
+#	- Variable 4: VM's in other unknown states
+#	- Variable 5: Total of VM's configuraded in the server
+#
+# Variables into .1.24 branch
+#	- Variable 1: Nova Intances (VM's) disk usage (bytes) in the server
+#	- Variable 2: Glance Images disk usage (bytes) in the server
+# 

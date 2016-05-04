@@ -1,0 +1,92 @@
+IMPORTANT NOTES !!
+
+Be sure to have good knowledge of the following topics:
+
+- Administration of Linux.
+- Virtualization on Linux with kvm / qemu / libvirt.
+- LinuxBridge and OpenVSwitch.
+- Linux namespaces.
+- Networks in general.
+- OpenStack.
+- NFS, GlusterFS.
+- "Correct" Install of Centos 7 O/S.
+
+This installer is ONLY for Centos 7 64-bit (x86_64 / amd64). Do not
+attempt to use it in another environment.
+
+
+1.- Base repositories and correct installation of Centos 7:
+
+Install your centos 7 server with 64 bits and select the packages for a basic infraestructure server without
+graphics environment. Do not include any extra repo like EPEL, ELREPO or RPMFORGE "yet", but you'll need to
+include EPEL along the Mitaka RDO Repo
+
+If you are going to use a "Cinder Volume", remember to reserve the disk space for it.
+
+Install RDO OpenStack MITAKA Repos:
+
+Centos:
+
+yum install centos-release-openstack-mitaka
+
+RHEL:
+
+yum install https://rdoproject.org/repos/rdo-release.rpm
+
+Install EPEL:
+
+yum -y install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-6.noarch.rpm
+
+After isntalling RDO Mitaka Repos and EPEL Repos, do a full update and reboot if necessary (new kernel installed):
+
+yum -y upgrade
+reboot
+
+
+2.- System Control (/etc/sysctl.conf).
+
+WARNING: This is VERY important!. Make sure you have the following items configured in 
+/etc/sysctl.conf:
+
+net.ipv4.ip_forward=1
+net.ipv4.conf.all.rp_filter=0
+net.ipv4.conf.default.rp_filter=0
+
+If you do not have configured this, please do it now and then reboot the machine.
+
+
+3. OpenVSWITCH:
+
+First install openvswitch. Run the commands below (after placing the repositories listed above):
+
+yum -y install openvswitch
+
+service openvswitch start
+
+chkconfig openvswitch on
+
+Then, create the bridges:
+
+First step: br-int (OpenStack integration switch/bridge):
+
+ovs-vsctl add-br br-int
+
+Next step: br-enp0s9 (OpenStack networks switch/bridge). Example for "enp0s9" interface:
+
+ovs-vsctl add-br br-enp0s9
+ovs-vsctl add-port br-enp0s9 enp0s9
+
+Please remember that in Centos the interfaces are using the new names. ethX is no longer used,
+unless you are running a virtual machine with virtio (network).
+
+
+NOTE: Always try to use an interface that is FREE and can be "dedicated" to OpenStack. 
+For other configurations, see the information that is available online. It is not necessary 
+to place the interfaces associated with the switches in /etc/network/interfaces, unless you 
+have "shared" and not dedicated to OpenStack, or unless you are using special "vlan-based"
+configurations.
+
+For more information, please refer to OpenStack main documentation site:
+
+http://docs.openstack.org
+

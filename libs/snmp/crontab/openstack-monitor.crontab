@@ -1,0 +1,11 @@
+#
+# Unattended installer for OpenStack.
+# Reynaldo R. Martinez P.
+# E-Mail: TigerLinux@Gmail.com
+#
+# SNMP Metrics Generator Crontab
+#
+2,7,12,17,22,27,32,37,42,47,52,57 * * * * root /usr/local/bin/node-cpu.sh > /var/tmp/node-cpu.txt
+2,7,12,17,22,27,32,37,42,47,52,57 * * * * root /usr/local/bin/node-memory.sh > /var/tmp/node-memory.txt
+2,7,12,17,22,27,32,37,42,47,52,57 * * * * root /usr/local/bin/vm-number-by-states.sh > /var/tmp/vm-number-by-states.txt
+2,7,12,17,22,27,32,37,42,47,52,57 * * * * root /usr/local/bin/vm-total-disk-bytes-usage.sh > /var/tmp/vm-disk.txt

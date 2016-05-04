@@ -1,0 +1,25 @@
+1.0.0.el7 - May 03, 2016
+
+- Firts stable version of our openstack Installer for MITAKA (Release 13).
+- All modules are now using Keystone V3 Auth.
+- Included FERNET tokens in Keystone and set as default token provider.
+- Included new nova-api database for nova-api service as instructed by
+  upstream (docs.openstack.org).
+- Included new "aodh" database for aodh alarming service.
+- Deprecated ceilometer-alarms old module and included "aodh" as new
+  alarming implementation along ceilometer. Aodh installs as part of
+  ceilometer module.
+- Included extra documentation for manual horizon-plugin extra dashboards
+  for trove, lbaasv2 and sahara.
+- Qpid message broker deprecated from our installation tool. RabbitMQ is
+  by far the best option for OpenStack.
+- Updated several oslo_messaging configs along all modules regarding
+  messaging implementations for Ceilometer. Old entries still in the
+  config until we determine that they can be safelly removed.
+- LBaaS V1 deprecated and LBaaS V2 installed by default by neutron module.
+- Extra safety options related to Keystone in keystone install module and
+  main config.
+- Main config moved to "sample-config" directory and documentation updated
+  to let the user know the steps needed in order to use the installer.
+- OpenStack python CLI used by default in several modules. Only neutron
+  install module is still using neutron cli for automated network creation.
