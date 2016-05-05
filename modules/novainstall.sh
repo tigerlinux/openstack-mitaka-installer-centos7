@@ -390,6 +390,11 @@ sync
 # nova for QEMU instead of KVM
 #
 
+if [ $forceqemu == "yes" ]
+then
+	$kvm_possible="0"
+fi
+
 if [ $kvm_possible == "0" ]
 then
 	echo ""

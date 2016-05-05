@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.0.0.el7 "Lynx Pardinus"
-# May 03, 2016
+# Version: 1.0.1.el7 "Lynx Pardinus"
+# May 05, 2016
 #
 
 #
@@ -533,6 +533,15 @@ instance_name_template="instance-%08x"
 # https://wiki.openstack.org/wiki/LibvirtXMLCPUModel
 # Common values: host-passtrough or host-model
 libvirt_cpu_mode="host-passthrough"
+#
+#
+# Normally, our installer autodetects if KVM is available and possible, but, in some rare circunstances
+# this auto-detection can fail and enable kvm where is not really possible, or convenient to use. In
+# such cases, you can force qemu instead of kvm. Be aware that kvm is the best option on physical hardware
+# where the cpu and motherboard supports intel/amd hardware virtualization. If you are using a vm inside
+# vmware, kvm-qemu, openstack or another VPS that is already virtual, you "should" change the following
+# variable to "yes". Otherwise, leave it to "no".
+forceqemu="no"
 
 
 

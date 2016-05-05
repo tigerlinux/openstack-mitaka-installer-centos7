@@ -215,6 +215,12 @@ crudini --set /etc/ceilometer/ceilometer.conf DEFAULT cinder_control_exchange ci
 crudini --set /etc/ceilometer/ceilometer.conf publisher telemetry_secret $metering_secret
 
 kvm_possible=`grep -E 'svm|vmx' /proc/cpuinfo|uniq|wc -l`
+
+if [ $forceqemu == "yes" ]
+then
+        $kvm_possible="0"
+fi
+
 if [ $kvm_possible == "0" ]
 then
 	crudini --set /etc/ceilometer/ceilometer.conf DEFAULT libvirt_type qemu

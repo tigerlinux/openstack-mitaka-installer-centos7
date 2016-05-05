@@ -212,6 +212,27 @@ else
 	cp ./libs/index.html /var/www/html/
 fi
 
+#
+# Patch - Material Theme is not properlly packaged. Some fonts are missing.
+# Those command solve the situation:
+
+yum -y install python2-XStatic-roboto-fontface roboto-fontface-common roboto-fontface-fonts mdi-common mdi-fonts python2-XStatic-mdi
+yum -y reinstall python2-XStatic-roboto-fontface roboto-fontface-common roboto-fontface-fonts mdi-common mdi-fonts python2-XStatic-mdi
+
+if [ ! -f /usr/share/openstack-dashboard/static/horizon/lib/roboto_fontface/fonts/Roboto-Regular.woff ]
+then
+	ln -s /usr/share/fonts/roboto_fontface /usr/share/openstack-dashboard/static/horizon/lib/roboto_fontface/fonts
+fi
+
+if [ ! -f /usr/share/openstack-dashboard/static/horizon/lib/mdi/fonts/materialdesignicons-webfont.woff ]
+then
+	ln -s /usr/share/fonts/mdi /usr/share/openstack-dashboard/static/horizon/lib/mdi/fonts
+fi
+
+#
+# End of patch
+#
+
 service httpd restart
 chkconfig httpd on
 

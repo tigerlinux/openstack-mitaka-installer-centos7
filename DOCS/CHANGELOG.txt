@@ -1,3 +1,10 @@
+1.0.1.el7 - May 05, 2016
+
+- Added "forceqemu" config option in order to force
+  qemu election instead of kvm in nova and ceilometer.
+- Added patch that correct horizon packaging error
+  affecting "material" dashboard theme.
+
 1.0.0.el7 - May 03, 2016
 
 - Firts stable version of our openstack Installer for MITAKA (Release 13).
