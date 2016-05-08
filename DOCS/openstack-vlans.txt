@@ -86,6 +86,7 @@ iface br-eth1 inet static
         address 0.0.0.0
         ovs_type OVSBridge
         ovs_ports eth1
+	post-up ifup eth1-10
 
 # Main bridge physical interface
 allow-br-eth1 eth1

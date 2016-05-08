@@ -1,3 +1,14 @@
+1.0.2.el7 - May 08, 2016
+
+- Added extra secuences in glance install module in
+  order to include extra metadata items.
+- Corrected some missing lines on "openstack vlans"
+  document in DOCS directory.
+- Changed our horizon patch for missing fonts that
+  aparently are not correctly packaged or referenced
+  in horizon rpm's. Our last try was not effective
+  enough. This one is more "fool-prof" (we hope...).
+
 1.0.1.el7 - May 05, 2016
 
 - Added "forceqemu" config option in order to force

@@ -221,12 +221,20 @@ yum -y reinstall python2-XStatic-roboto-fontface roboto-fontface-common roboto-f
 
 if [ ! -f /usr/share/openstack-dashboard/static/horizon/lib/roboto_fontface/fonts/Roboto-Regular.woff ]
 then
-	ln -s /usr/share/fonts/roboto_fontface /usr/share/openstack-dashboard/static/horizon/lib/roboto_fontface/fonts
+	# ln -s /usr/share/fonts/roboto_fontface /usr/share/openstack-dashboard/static/horizon/lib/roboto_fontface/fonts
+	mkdir -p /usr/share/openstack-dashboard/static/horizon/lib/roboto_fontface/fonts
+	mkdir -p /usr/share/openstack-dashboard/openstack_dashboard/static/horizon/lib/font-awesome/fonts
+	mkdir -p /usr/share/openstack-dashboard/openstack_dashboard/static/horizon/lib/roboto_fontface/fonts
+	cp -v /usr/share/fonts/roboto_fontface/* /usr/share/openstack-dashboard/openstack_dashboard/static/horizon/lib/roboto_fontface/fonts
+	cp -v /usr/share/fonts/fontawesome/* /usr/share/openstack-dashboard/openstack_dashboard/static/horizon/lib/font-awesome/fonts
 fi
 
 if [ ! -f /usr/share/openstack-dashboard/static/horizon/lib/mdi/fonts/materialdesignicons-webfont.woff ]
 then
-	ln -s /usr/share/fonts/mdi /usr/share/openstack-dashboard/static/horizon/lib/mdi/fonts
+	# ln -s /usr/share/fonts/mdi /usr/share/openstack-dashboard/static/horizon/lib/mdi/fonts
+	mkdir -p /usr/share/openstack-dashboard/static/horizon/lib/mdi/fonts
+	mkdir -p /usr/share/openstack-dashboard/openstack_dashboard/static/horizon/lib/mdi/fonts
+	cp -v /usr/share/fonts/mdi/* /usr/share/openstack-dashboard/openstack_dashboard/static/horizon/lib/mdi/fonts/
 fi
 
 #
