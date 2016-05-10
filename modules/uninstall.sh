@@ -64,6 +64,7 @@ yum -y erase openstack-glance \
 	openstack-heat-* \
 	openstack-trove-* \
 	openstack-sahara* \
+	openstack-manila* \
 	mongodb-server \
 	mongodb \
 	haproxy \
@@ -123,6 +124,7 @@ userdel -f -r heat
 userdel -f -r trove
 userdel -f -r qpidd
 userdel -f -r aodh
+userdel -f -r manila
 
 echo "Erasing remaining files"
 
@@ -176,12 +178,15 @@ rm -fr /etc/glance \
 	/etc/aodh \
 	/var/log/aodh \
 	/var/lib/aodh \
+	/etc/manila \
+	/var/log/manila \
+	/var/lib/manila \
 	/root/keystonerc_*
 
-rm -fr /var/log/{keystone,glance,nova,neutron,cinder,ceilometer,heat,sahara,trove,aodh}*
-rm -fr /run/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh}*
-rm -fr /run/lock/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh}*
-rm -fr /root/.{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh}client
+rm -fr /var/log/{keystone,glance,nova,neutron,cinder,ceilometer,heat,sahara,trove,aodh,manila}*
+rm -fr /run/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh,manila}*
+rm -fr /run/lock/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh,manila}*
+rm -fr /root/.{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh,manila}client
 
 rm -f /etc/cron.d/openstack-monitor-crontab
 rm -f /etc/cron.d/ceilometer-expirer-crontab
@@ -262,21 +267,23 @@ then
 	echo ""
 	case $dbflavor in
 	"mysql")
-		service mysqld stop
+		systemctl stop mariadb
+		systemctl disable mariadb
 		sync
 		sleep 5
 		sync
-		yum -y erase mysql-server mysql mariadb-galera-server mariadb-galera-common \
-			mariadb-galera galera mariadb-server-galera mariadb-server 
+		yum -y erase mariadb-libs mariadb-server-galera mariadb-config mariadb-server \
+			mariadb-common mariadb-galera-common mariadb mariadb-errmsg
 		userdel -r mysql
 		rm -f /root/.my.cnf /etc/my.cnf
+		rm -fr /etc/my.cnf.d /var/log/mariadb /var/lib/mysql
 		;;
 	"postgres")
 		service postgresql stop
 		sync
 		sleep 5
 		sync
-		yum -y erase postgresql-server
+		yum -y erase postgresql-server postgresql-libs postgresql
 		userdel -r postgres
 		rm -f /root/.pgpass
 		;;
@@ -289,6 +296,17 @@ then
         echo "Cleaning Up Cinder Volume LV: $cinderlvmname"
         lvremove -f $cinderlvmname 2>/dev/null
 fi
+
+if [ $manilacleanatuninstall == "yes" ]
+then
+        echo ""
+        echo "Cleaning Up Manila Volume LV: $manilavg"
+        lvremove -f $manilavg 2>/dev/null
+fi
+
+#
+# Final FULL Clean UP
+yum clean all
 
 echo ""
 echo "OpenStack Uninstall Complete"

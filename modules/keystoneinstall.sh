@@ -505,6 +505,11 @@ then
 	./modules/keystone-sahara.sh
 fi
 
+if [ $manilainstall == "yes" ]
+then
+	./modules/keystone-manila.sh
+fi
+
 #
 # If we define extra tenants in the installer config file, here we proceed to create them
 #

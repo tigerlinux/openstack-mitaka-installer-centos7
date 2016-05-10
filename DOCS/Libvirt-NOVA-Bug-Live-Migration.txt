@@ -1,0 +1,47 @@
+ALERT TO ALL UBUNTU USERS (AND POTENTIALLY, CENTOS USERS)
+
+There is a confirmed BUG (https://bugs.launchpad.net/nova/+bug/1576093) affecting Live Migration (block and non-block) when Libvirt 1.3.1 is used (this means: Ubuntu 14.04lts with ubuntu-cloud-archive repos for Mitaka).
+
+This bug prevents the use of tunneled live migration. 
+
+By the moment, and until the bug is corrected and new nova and/or libivrt packages are released, the workaround is to disable apparmor in libvirt and tunneled live migrations with the following commands (Ubuntu Server 14.04lts):
+
+aa-disable /etc/apparmor.d/usr.sbin.libvirtd
+/etc/init.d/libvirt-bin restart
+crudini --del /etc/nova/nova.conf libvirt live_migration_flag
+crudini --del /etc/nova/nova.conf libvirt block_migration_flag
+crudini --set /etc/nova/nova.conf libvirt live_migration_tunnelled False
+openstack-control.sh restart nova
+
+If you already have running instances, either perform a normal migration on them or hard-reboot them so libvirt will reconstruct their XML definitions.
+
+While this is only happening in Ubuntu 14.04 lts at this time, if you encounter this in Centos, please use the following commands:
+
+crudini --del /etc/nova/nova.conf libvirt live_migration_flag
+crudini --del /etc/nova/nova.conf libvirt block_migration_flag
+crudini --set /etc/nova/nova.conf libvirt live_migration_tunnelled False
+openstack-control.sh restart nova
+
+Keep and eye on the bug at the following links:
+
+https://bugs.launchpad.net/nova/+bug/1576093
+https://review.openstack.org/#/c/310707/
+
+The current versions in Ubuntu 14.04 with ubuntu cloud archive repo which are affected by this bug are:
+
+Libvirt:
+
+libvirt-bin                         1.3.1-1ubuntu10~cloud0
+libvirt-doc                         1.3.1-1ubuntu10~cloud0
+libvirt0:amd64                      1.3.1-1ubuntu10~cloud0
+python-libvirt                      1.3.1-1ubuntu1~cloud0
+
+Nova:
+
+nova-common                         2:13.0.0-0ubuntu2~cloud0
+nova-compute                        2:13.0.0-0ubuntu2~cloud0
+nova-compute-kvm                    2:13.0.0-0ubuntu2~cloud0
+nova-compute-libvirt                2:13.0.0-0ubuntu2~cloud0
+
+END.-
+

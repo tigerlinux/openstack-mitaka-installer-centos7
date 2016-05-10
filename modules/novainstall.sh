@@ -377,6 +377,7 @@ sync
 #
 # Deprecated
 # crudini --set /etc/nova/nova.conf libvirt live_migration_flag "VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_TUNNELLED"
+crudini --set /etc/nova/nova.conf libvirt live_migration_flag "VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_TUNNELLED"
 crudini --set /etc/nova/nova.conf DEFAULT config_drive_format vfat
 # New in Mitaka for Live Migration
 crudini --set /etc/nova/nova.conf libvirt live_migration_tunnelled True
@@ -392,7 +393,7 @@ sync
 
 if [ $forceqemu == "yes" ]
 then
-	$kvm_possible="0"
+	kvm_possible="0"
 fi
 
 if [ $kvm_possible == "0" ]

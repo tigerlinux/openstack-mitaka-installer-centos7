@@ -115,6 +115,7 @@ sleep 1
 /usr/local/bin/openstack-log-cleaner.sh auto
 sync
 sleep 1
+/usr/local/bin/openstack-control.sh enable
 /usr/local/bin/openstack-control.sh start
 
 #

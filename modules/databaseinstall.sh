@@ -64,6 +64,7 @@ then
 		yum -y install mariadb-galera-server mariadb-galera-common mariadb-galera galera
 		yum -y install openstack-utils
 		crudini --set /etc/my.cnf.d/server.cnf mysqld max_allowed_packet 256M
+		sed -i -r 's/^bind-address.*=.*0.0.0.0/bind-address=0.0.0.0\nmax_connections=1000/' /etc/my.cnf.d/galera.cnf
 		systemctl enable mariadb.service
 		systemctl start mariadb.service
 		/usr/bin/mysqladmin -u $mysqldbadm password $mysqldbpassword > /dev/null 2>&1
@@ -92,6 +93,7 @@ then
 		echo "port = 5432" >> /var/lib/pgsql/data/postgresql.conf
 		cat ./libs/pg_hba.conf > /var/lib/pgsql/data/pg_hba.conf
 		echo "host all all 0.0.0.0/0 md5" >> /var/lib/pgsql/data/pg_hba.conf
+		sed -r -i 's/^max_connections.*/max_connections\ =\ 1000/' /var/lib/pgsql/data/postgresql.conf
 		service postgresql stop
 		service postgresql start
 		sleep 5
@@ -314,6 +316,20 @@ then
 		sleep 5
 		sync
 
+		echo "Manila"
+		echo "CREATE DATABASE $maniladbname default character set utf8;"|$mysqlcommand
+		echo "GRANT ALL ON $maniladbname.* TO '$maniladbuser'@'%' IDENTIFIED BY '$maniladbpass';"|$mysqlcommand
+		echo "GRANT ALL ON $maniladbname.* TO '$maniladbuser'@'localhost' IDENTIFIED BY '$maniladbpass';"|$mysqlcommand
+		echo "GRANT ALL ON $maniladbname.* TO '$maniladbuser'@'$manilahost' IDENTIFIED BY '$maniladbpass';"|$mysqlcommand
+		for extrahost in $extramanilahosts
+		do
+			echo "GRANT ALL ON $maniladbname.* TO '$maniladbuser'@'$extrahost' IDENTIFIED BY '$maniladbpass';"|$mysqlcommand
+		done
+		echo "FLUSH PRIVILEGES;"|$mysqlcommand
+		sync
+		sleep 5
+		sync
+
 		echo ""
 		echo "Created Databases:"
 		echo "show databases;"|$mysqlcommand
@@ -336,7 +352,7 @@ then
 	"postgres")
 		echo "*:*:*:$psqldbadm:$psqldbpassword" > /root/.pgpass
 		chmod 0600 /root/.pgpass
-		echo "Keystone"
+		echo "Keystone:"
 		echo "CREATE user $keystonedbuser;"|$psqlcommand
 		echo "ALTER user $keystonedbuser with password '$keystonedbpass'"|$psqlcommand
 		echo "CREATE DATABASE $keystonedbname"|$psqlcommand
@@ -345,7 +361,7 @@ then
 		sleep 5
 		sync
 
-		echo "Glance"
+		echo "Glance:"
 		echo "CREATE user $glancedbuser;"|$psqlcommand
 		echo "ALTER user $glancedbuser with password '$glancedbpass'"|$psqlcommand
 		echo "CREATE DATABASE $glancedbname"|$psqlcommand
@@ -354,7 +370,7 @@ then
 		sleep 5
 		sync
 
-		echo "Cinder"
+		echo "Cinder:"
 		echo "CREATE user $cinderdbuser;"|$psqlcommand
 		echo "ALTER user $cinderdbuser with password '$cinderdbpass'"|$psqlcommand
 		echo "CREATE DATABASE $cinderdbname"|$psqlcommand
@@ -363,7 +379,7 @@ then
 		sleep 5
 		sync
 
-		echo "Neutron"
+		echo "Neutron:"
 		echo "CREATE user $neutrondbuser;"|$psqlcommand
 		echo "ALTER user $neutrondbuser with password '$neutrondbpass'"|$psqlcommand
 		echo "CREATE DATABASE $neutrondbname"|$psqlcommand
@@ -372,7 +388,7 @@ then
 		sleep 5
 		sync
 
-		echo "Nova/Nova-API" 
+		echo "Nova/Nova-API:" 
 		echo "CREATE user $novadbuser;"|$psqlcommand
 		echo "ALTER user $novadbuser with password '$novadbpass'"|$psqlcommand
 		echo "CREATE DATABASE $novadbname"|$psqlcommand
@@ -383,7 +399,7 @@ then
 		sleep 5
 		sync
 
-		echo "Heat" 
+		echo "Heat:" 
 		echo "CREATE user $heatdbuser;"|$psqlcommand
 		echo "ALTER user $heatdbuser with password '$heatdbpass'"|$psqlcommand
 		echo "CREATE DATABASE $heatdbname"|$psqlcommand
@@ -392,7 +408,7 @@ then
 		sleep 5
 		sync
 
-		echo "Horizon" 
+		echo "Horizon:" 
 		echo "CREATE user $horizondbuser;"|$psqlcommand
 		echo "ALTER user $horizondbuser with password '$horizondbpass'"|$psqlcommand
 		echo "CREATE DATABASE $horizondbname"|$psqlcommand
@@ -401,7 +417,7 @@ then
 		sleep 5
 		sync
 
-		echo "Trove" 
+		echo "Trove:" 
 		echo "CREATE user $trovedbuser;"|$psqlcommand
 		echo "ALTER user $trovedbuser with password '$trovedbpass'"|$psqlcommand
 		echo "CREATE DATABASE $trovedbname"|$psqlcommand
@@ -410,7 +426,7 @@ then
 		sleep 5
 		sync
 
-		echo "Sahara"
+		echo "Sahara:"
 		echo "CREATE user $saharadbuser;"|$psqlcommand
 		echo "ALTER user $saharadbuser with password '$saharadbpass'"|$psqlcommand
 		echo "CREATE DATABASE $saharadbname"|$psqlcommand
@@ -419,11 +435,20 @@ then
 		sleep 5
 		sync
 
-		echo "Aodh"
+		echo "Aodh:"
 		echo "CREATE user $aodhdbuser;"|$psqlcommand
 		echo "ALTER user $aodhdbuser with password '$aodhdbpass'"|$psqlcommand
 		echo "CREATE DATABASE $aodhdbname"|$psqlcommand
 		echo "GRANT ALL PRIVILEGES ON database $aodhdbname TO $aodhdbuser;"|$psqlcommand
+		sync
+		sleep 5
+		sync
+
+		echo "Manila:"
+		echo "CREATE user $maniladbuser;"|$psqlcommand
+		echo "ALTER user $maniladbuser with password '$maniladbpass'"|$psqlcommand
+		echo "CREATE DATABASE $maniladbname"|$psqlcommand
+		echo "GRANT ALL PRIVILEGES ON database $maniladbname TO $maniladbuser;"|$psqlcommand
 		sync
 		sleep 5
 		sync

@@ -1,3 +1,18 @@
+1.1.0.el7 - May 10, 2016
+
+- Added configuration of "max connections" and set
+  to "1000" for mariadb and postgresql installed DB 
+  backends. Only if you choose to let the installer
+  to install all DB related packages.
+- Added ALERT doc (DOCS directory) regarding bug with
+  some distros and libvirt 1.3.1 which affects live
+  migration. The document also contains the workaround.
+- Improved uninstall module in order to left a more
+  clean operating system after openstack uninstall.
+- New Mayor Feature: Manila Module installation added
+  to installer. For now, with CIFS and NFS support
+  and LVM Storage backend.
+
 1.0.2.el7 - May 08, 2016
 
 - Added extra secuences in glance install module in

@@ -235,6 +235,23 @@ Tips for a properlly working trove image:
   that contains an ephemeral disk. Trove requires an extra disk for the database.
 
 
+### Manila
+
+If you choose to install manila, this installation tool will install and configure all the software needed, and also, it will configure the LVM based backend, if you choose to use that backend. As a requirement, the LVM backend need a previouslly configured LVM group (same case as Cinder using LVM). By default, our main config names this volume group "manila-volumes" but yoy can change it in the config. Remember to create the LV if you plan to include Manila with LVM backed storage:
+
+```bash
+pvcreate /dev/sde
+vgcreate manila-volumes /dev/sde
+```
+
+Another example with an free /dev/sde3 partition:
+
+```bash
+pvcreate /dev/sde3
+vgcreate cinder-volumes /dev/sde3
+```
+
+
 ### Support Scripts installed with this solution
 
 This installer will place a OpenStack Services control script in the “/usr/local/bin” path:

@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.0.2.el7 "Lynx Pardinus"
-# May 08, 2016
+# Version: 1.1.0.el7 "Lynx Pardinus"
+# May 10, 2016
 #
 
 #
@@ -123,6 +123,10 @@ saharadbpass="P@ssw0rd"
 aodhdbname="aodhdb"
 aodhdbuser="aodhdbuser"
 aodhdbpass="P@ssw0rd"
+# Manila
+maniladbname="maniladb"
+maniladbuser="maniladbuser"
+maniladbpass="P@ssw0rd"
 
 #
 # OPENSTACK KEYSTONE
@@ -703,6 +707,42 @@ saharaemail="sahara@localhost"
 # Normally, this is not necessary unless your mysql service access policies are very
 # strict.
 extrasaharahosts=""
+
+
+
+#
+# OPENSTACK MANILA
+#
+# Same as with heat,trove and sahara. By default we don't install them. If you want to include
+# manila in your cloud, set this yo YES. And again, install this in the controller or in a 
+# dedicated manila host
+manilainstall="no"
+# The controller IP or the IP of the dedicated manila host.
+manilahost="192.168.50.13"
+# Again, change the password and e-mail
+manilauser="manila"
+manilasvcev1="manilav1"
+manilasvcev2="manilav2"
+manilapass="P@ssw0rd"
+manilaemail="manila@localhost"
+#
+# The next variable controls if you want to clean-up all lv's at uninstall time.
+# the default is "yes", meaning, all lv's in the manila-volumes vg will be erased.
+manilacleanatuninstall="yes"
+#
+# We can configure the LVM based VG for you. This requires an already present 
+# manila-dedicated volume group.
+manilalvmbackend="yes"
+# The Manila VG Name - This must be already created or your manila installation
+# will fail. Note: By the moment, we only support LVM based backends for Manila,
+# but you can still manually configure other backends.
+manilavg="manila-volumes"
+# Only if you are using MySQL as DB backend. If for any chance, you have multiple
+# manila hosts, put here the IP address of the extra hosts, space separated.
+# Normally, this is not necessary unless your mysql service access policies are very
+# strict.
+extramanilahosts=""
+
 
 
 #

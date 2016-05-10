@@ -117,6 +117,25 @@ python manage.py collectstatic --noinput
 /etc/init.d/apache2 restart
 
 
+MANILA (Only if you are using Ubuntu 14.04 with ubuntu-cloud-archive):
+
+Surprisinglly, the Centos Manila packages comes with the Horizon plugin, but, ubuntu ones does not. If you install manila, and want to include the horizon plugin, please use the following commands:
+
+apt-get -y install git
+
+cd /usr/local/src
+git clone https://github.com/openstack/manila-ui
+cd /usr/local/src/manila-ui/
+git checkout stable/mitaka
+pip install -e ./
+cp /usr/local/src/manila-ui/manila_ui/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
+cd /usr/share/openstack-dashboard/
+python manage.py compress --force
+python manage.py collectstatic --noinput
+
+/etc/init.d/apache2 restart
+
+
 FINAL NOTES:
 
 Only intall those extra panels if you have the relevant components installed (mean, do not install them if you don't have trove, or sahara, or neutron installed).

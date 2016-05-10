@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Installer Script
-# Version: 1.0.2.el7 "Lynx Pardinus"
-# May 08, 2016
+# Version: 1.1.0.el7 "Lynx Pardinus"
+# May 10, 2016
 #
 
 PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
@@ -72,7 +72,7 @@ case $1 in
 	echo "Flavor: OpenStack MITAKA for Centos 7"
 	echo "Made by: Reynaldo R. Martinez P."
 	echo "E-Mail: TigerLinux@Gmail.com"
-	echo "Version 1.0.2.el7 \"Lynx Pardinus\" - May 08, 2016"
+	echo "Version 1.1.0.el7 \"Lynx Pardinus\" - May 10, 2016"
 	echo ""
 	echo "I'll verify all requiremens"
 	echo "If any requirement is not met, I'll stop and inform what's missing"
@@ -399,6 +399,24 @@ case $1 in
                 else
                         echo ""
                         echo "Sahara installation failed. Aborting !!"
+                        echo ""
+                        exit 0
+                fi
+	fi
+
+	if [ $manilainstall == "yes" ]
+	then
+                echo ""
+                echo "Installing OPENSTACK MANILA"
+		
+                ./modules/manilainstall.sh
+		
+                if [ -f /etc/openstack-control-script-config/manila-installed ]
+                then
+                        echo "OPENSTACK MANILA INSTALLED"
+                else
+                        echo ""
+                        echo "Manila installation failed. Aborting !!"
                         echo ""
                         exit 0
                 fi

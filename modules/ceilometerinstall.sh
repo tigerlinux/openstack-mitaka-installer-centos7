@@ -218,7 +218,7 @@ kvm_possible=`grep -E 'svm|vmx' /proc/cpuinfo|uniq|wc -l`
 
 if [ $forceqemu == "yes" ]
 then
-        $kvm_possible="0"
+        kvm_possible="0"
 fi
 
 if [ $kvm_possible == "0" ]
@@ -233,10 +233,13 @@ crudini --set /etc/ceilometer/ceilometer.conf DEFAULT verbose false
 crudini --set /etc/ceilometer/ceilometer.conf database connection "mongodb://$mondbuser:$mondbpass@$mondbhost:$mondbport/$mondbname"
 crudini --set /etc/ceilometer/ceilometer.conf database metering_time_to_live $mongodbttl
 crudini --set /etc/ceilometer/ceilometer.conf database time_to_live $mongodbttl
+crudini --set /etc/ceilometer/ceilometer.conf database event_time_to_live $mongodbttl
 
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT notification_topics notifications
 
 crudini --set /etc/ceilometer/ceilometer.conf DEFAULT dispatcher database
+crudini --set /etc/ceilometer/ceilometer.conf DEFAULT meter_dispatchers database
+crudini --set /etc/ceilometer/ceilometer.conf DEFAULT event_dispatchers database
  
 case $brokerflavor in
 "qpid")
