@@ -330,6 +330,24 @@ then
 		sleep 5
 		sync
 
+		echo "Designate"
+		echo "CREATE DATABASE $designatedbname default character set utf8;"|$mysqlcommand
+		echo "CREATE DATABASE $designatedbpoolmanagerdb default character set utf8;"|$mysqlcommand
+		echo "GRANT ALL ON $designatedbname.* TO '$designatedbuser'@'%' IDENTIFIED BY '$designatedbpass';"|$mysqlcommand
+		echo "GRANT ALL ON $designatedbname.* TO '$designatedbuser'@'localhost' IDENTIFIED BY '$designatedbpass';"|$mysqlcommand
+		echo "GRANT ALL ON $designatedbname.* TO '$designatedbuser'@'$designatehost' IDENTIFIED BY '$designatedbpass';"|$mysqlcommand
+		echo "GRANT ALL ON $designatedbpoolmanagerdb.* TO '$designatedbuser'@'%' IDENTIFIED BY '$designatedbpass';"|$mysqlcommand
+		echo "GRANT ALL ON $designatedbpoolmanagerdb.* TO '$designatedbuser'@'localhost' IDENTIFIED BY '$designatedbpass';"|$mysqlcommand
+		echo "GRANT ALL ON $designatedbpoolmanagerdb.* TO '$designatedbuser'@'$designatehost' IDENTIFIED BY '$designatedbpass';"|$mysqlcommand
+		for extrahost in $extradesignatehosts
+		do
+			echo "GRANT ALL ON $designatedbname.* TO '$designatedbuser'@'$extrahost' IDENTIFIED BY '$designatedbpass';"|$mysqlcommand
+		done
+		echo "FLUSH PRIVILEGES;"|$mysqlcommand
+		sync
+		sleep 5
+		sync
+
 		echo ""
 		echo "Created Databases:"
 		echo "show databases;"|$mysqlcommand
@@ -449,6 +467,17 @@ then
 		echo "ALTER user $maniladbuser with password '$maniladbpass'"|$psqlcommand
 		echo "CREATE DATABASE $maniladbname"|$psqlcommand
 		echo "GRANT ALL PRIVILEGES ON database $maniladbname TO $maniladbuser;"|$psqlcommand
+		sync
+		sleep 5
+		sync
+
+		echo "Designate:"
+		echo "CREATE user $designatedbuser;"|$psqlcommand
+		echo "ALTER user $designatedbuser with password '$designatedbpass'"|$psqlcommand
+		echo "CREATE DATABASE $designatedbname"|$psqlcommand
+		echo "CREATE DATABASE $designatedbpoolmanagerdb"|$psqlcommand
+		echo "GRANT ALL PRIVILEGES ON database $designatedbname TO $designatedbuser;"|$psqlcommand
+		echo "GRANT ALL PRIVILEGES ON database $designatedbpoolmanagerdb TO $designatedbuser;"|$psqlcommand
 		sync
 		sleep 5
 		sync

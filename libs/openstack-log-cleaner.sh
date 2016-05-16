@@ -52,6 +52,7 @@ logdirs='
 	/var/log/trove
 	/var/log/sahara
 	/var/log/manila
+	/var/log/designate
 '
 
 for logdirectory in $logdirs

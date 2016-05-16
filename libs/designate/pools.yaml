@@ -1,0 +1,24 @@
+- also_notifies: []
+  attributes: {}
+  description: Default BIND9 Pool
+  id: 794ccc2c-d751-44fe-b57f-8894c9f5c842
+  name: default
+  nameservers:
+  - host: 127.0.0.1
+    port: 53
+  ns_records:
+  - hostname: DESIGNATEHOSTNAME.
+    priority: 1
+  targets:
+  - description: BIND9 Server 1
+    masters:
+    - host: 127.0.0.1
+      port: 5354
+    options:
+      host: 127.0.0.1
+      port: '53'
+      rndc_host: 127.0.0.1
+      rndc_key_file: /etc/rndc.key
+      rndc_port: '953'
+      clean_zonefile: False
+    type: bind9

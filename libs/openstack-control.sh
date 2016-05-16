@@ -253,6 +253,31 @@ openstack-manila-share
 "
 )
 
+# Designate. Index=11
+if [ -f /etc/openstack-control-script-config/designate-sink-installed ]
+then
+	svcdesignate=(
+	"
+	designate-api
+	designate-central
+	designate-mdns
+	designate-pool-manager
+	designate-zone-manager
+	designate-sink
+	"
+	)
+else
+	svcdesignate=(
+	"
+	designate-api
+	designate-central
+	designate-mdns
+	designate-pool-manager
+	designate-zone-manager
+	"
+	)
+fi
+
 #
 # Our Service Indexes:
 #
@@ -267,6 +292,7 @@ openstack-manila-share
 # Trove = 8
 # Sahara = 9
 # Manila = 10
+# Designate = 11
 #
 
 # Now, we create a super array with all services:
@@ -282,6 +308,7 @@ servicesstart=("${servicesstart[@]}" "${svcheat[@]}")		# Index 7 - Heat
 servicesstart=("${servicesstart[@]}" "${svctrove[@]}")		# Index 8 - Trove
 servicesstart=("${servicesstart[@]}" "${svcsahara[@]}")		# Index 9 - Sahara
 servicesstart=("${servicesstart[@]}" "${svcmanila[@]}")         # Index 10 - Manila
+servicesstart=("${servicesstart[@]}" "${svcdesignate[@]}")	# Index 11 - Manila
 
 moduleliststart=""
 moduleliststop=""
@@ -350,6 +377,12 @@ fi
 if [ -f /etc/openstack-control-script-config/manila ]
 then
         moduleliststart="$moduleliststart 10"
+fi
+
+# Index 11 - Designate
+if [ -f /etc/openstack-control-script-config/designate ]
+then
+        moduleliststart="$moduleliststart 11"
 fi
 
 #
@@ -433,6 +466,13 @@ manila)
         then
                 moduleliststart="10"
         fi
+        ;;
+designate)
+        # Index 11
+        if [ -f /etc/openstack-control-script-config/designate ]
+        then
+                moduleliststart="11"
+        fi 
         ;;
 esac
 

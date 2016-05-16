@@ -167,7 +167,7 @@ crudini --set /etc/nova/nova.conf keystone_authtoken memcached_servers $keystone
 # Ceilometer NOVA configuration
 #
 
-if [ $ceilometerinstall == "yes" ]
+if [ $ceilometerinstall == "yes" ] || [ $dnssinkactivate == "yes" ]
 then
 	crudini --set /etc/nova/nova.conf DEFAULT notification_driver messagingv2
 	crudini --set /etc/nova/nova.conf DEFAULT instance_usage_audit True

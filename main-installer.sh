@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Installer Script
-# Version: 1.1.0.el7 "Lynx Pardinus"
-# May 10, 2016
+# Version: 1.2.0.el7 "Lynx Pardinus"
+# May 16, 2016
 #
 
 PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
@@ -31,6 +31,8 @@ PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 #     - Heat.
 #     - Trove.
 #     - Sahara.
+#     - Manila.
+#     - Designate.
 #     - Horizon.
 # 7.- Basic SNMP Support.
 # 8.- Post-install with maintenance crontabs and scripts
@@ -72,7 +74,7 @@ case $1 in
 	echo "Flavor: OpenStack MITAKA for Centos 7"
 	echo "Made by: Reynaldo R. Martinez P."
 	echo "E-Mail: TigerLinux@Gmail.com"
-	echo "Version 1.1.0.el7 \"Lynx Pardinus\" - May 10, 2016"
+	echo "Version 1.2.0.el7 \"Lynx Pardinus\" - May 16, 2016"
 	echo ""
 	echo "I'll verify all requiremens"
 	echo "If any requirement is not met, I'll stop and inform what's missing"
@@ -417,6 +419,24 @@ case $1 in
                 else
                         echo ""
                         echo "Manila installation failed. Aborting !!"
+                        echo ""
+                        exit 0
+                fi
+	fi
+
+	if [ $designateinstall == "yes" ]
+	then
+                echo ""
+                echo "Installing OPENSTACK DESIGNATE"
+		
+                ./modules/designateinstall.sh
+		
+                if [ -f /etc/openstack-control-script-config/designate-installed ]
+                then
+                        echo "OPENSTACK DESIGNATE INSTALLED"
+                else
+                        echo ""
+                        echo "Designate installation failed. Aborting !!"
                         echo ""
                         exit 0
                 fi

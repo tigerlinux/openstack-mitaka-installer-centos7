@@ -1,3 +1,10 @@
+1.2.0.el7 - May 16, 2016
+
+- Added "EXPERIMENTAL" support for Designate DNSaaS
+  openstack module. Also, we provide the option to
+  enable and configure SINK Service for designate
+  integration with nova and neutron. 
+
 1.1.0.el7 - May 10, 2016
 
 - Added configuration of "max connections" and set

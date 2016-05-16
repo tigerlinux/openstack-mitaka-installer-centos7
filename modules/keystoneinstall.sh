@@ -510,6 +510,11 @@ then
 	./modules/keystone-manila.sh
 fi
 
+if [ $designateinstall == "yes" ]
+then
+	./modules/keystone-designate.sh
+fi
+
 #
 # If we define extra tenants in the installer config file, here we proceed to create them
 #

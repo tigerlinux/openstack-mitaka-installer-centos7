@@ -1,5 +1,5 @@
 Installer Version:
 
-1.1.0.el7 "Lynx Pardinus"
+1.2.0.el7 "Lynx Pardinus"
 
 ONLY FOR OPENSTACK RELEASE 13 "MITAKA"

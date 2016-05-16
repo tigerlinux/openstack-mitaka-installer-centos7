@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.1.0.el7 "Lynx Pardinus"
-# May 10, 2016
+# Version: 1.2.0.el7 "Lynx Pardinus"
+# May 16, 2016
 #
 
 #
@@ -127,6 +127,11 @@ aodhdbpass="P@ssw0rd"
 maniladbname="maniladb"
 maniladbuser="maniladbuser"
 maniladbpass="P@ssw0rd"
+# Designate
+designatedbname="designatedb"
+designatedbpoolmanagerdb="designatepoolmanagerdb"
+designatedbuser="designatedbuser"
+designatedbpass="P@ssw0rd"
 
 #
 # OPENSTACK KEYSTONE
@@ -641,6 +646,7 @@ heatencriptionkey="7a6502a023ff8a3a16fbc2e438bc7ddfd524707cc892c30769f7411b68de4
 extraheathosts=""
 
 
+
 #
 # OPENSTACK TROVE
 #
@@ -746,6 +752,51 @@ extramanilahosts=""
 
 
 #
+# OPENSTACK DESIGNATE - EXPERIMENTAL
+#
+# We are including EXPERIMENTAL support for Designate. Please, read all the documentation
+# about OpenStack Designate in order to fully understand the way DNSaaS is implemented with
+# designate.
+# As with the other modules (trove, manila, etc.) our default is "no". Change it to "yes" in
+# order to install designate:
+designateinstall="no"
+designatehost="192.168.50.13"
+# Again, change the password and e-mail
+designateuser="designate"
+designatesvcev1="designatev1"
+designatesvcev2="designatev2"
+designatepass="P@ssw0rd"
+designateemail="designate@localhost"
+#
+# This is very important. Pur here a valid e-mail. This is the e-mail that will be configured
+# by default inside your zone pool.
+zonepooldefaultemail="designateadmin@localdomain.dom"
+#
+# Our installer provision designate TLD's from the file at: 
+# http://data.iana.org/TLD/tlds-alpha-by-domain.txt
+# but, you can add extra TLD's (normally not "legal" tld's) that you would like to define
+# inside your organization. Note that you cannot create domains whose tld's are not defined
+# into designate:
+dnsextratlds="home dom bogus"
+dnsextratldfile="/etc/designate/extra-tlds.txt"
+#
+# Optional feature: If you want, we can configure designate SINK service in order to
+# auto-create DNS records in an specific DNS domain (designate managed)
+# For this feature to work correctly, please choose "yes" in the following variable
+# and supply the DNS domain that we will auto-create in Designate and configure in the
+# SINK service:
+dnssinkactivate="no"
+dnssinkdomain="mydnsdomain.org"
+dnssinkdomainemail="designateadmin@mydnsdomain.org"
+# Only if you are using MySQL as DB backend. If for any chance, you have multiple
+# designate hosts, put here the IP address of the extra hosts, space separated.
+# Normally, this is not necessary unless your mysql service access policies are very
+# strict.
+extradesignatehosts=""
+
+
+
+#
 # SNMP MONITORING SUPPORT
 #
 # If you want to include snmpd monitoring, set the following variable to "yes". We include
@@ -756,6 +807,7 @@ extramanilahosts=""
 # See /etc/snmp/snmpd.conf for more information
 #
 snmpinstall="no"
+
 
 
 #

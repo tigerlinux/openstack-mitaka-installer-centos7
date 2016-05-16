@@ -34,9 +34,22 @@ echo "Stopping and deactivating OpenStack services"
 /usr/local/bin/openstack-control.sh disable
 service mongod stop
 chkconfig mongod off
-killall -9 -u mongodb
-killall -9 mongod
-killall -9 dnsmasq
+
+# Some Sanity clean up
+killall -9 -u mongodb >/dev/null 2>&1
+killall -9 mongod >/dev/null 2>&1
+killall -9 dnsmasq >/dev/null 2>&1
+killall -9 -u neutron >/dev/null 2>&1
+killall -9 -u nova >/dev/null 2>&1
+killall -9 -u cinder >/dev/null 2>&1
+killall -9 -u designate >/dev/null 2>&1
+killall -9 -u glance >/dev/null 2>&1
+killall -9 -u trove >/dev/null 2>&1
+killall -9 -u sahara >/dev/null 2>&1
+killall -9 -u manila >/dev/null 2>&1
+killall -9 -u ceilometer >/dev/null 2>&1
+killall -9 -u aodh >/dev/null 2>&1
+killall -9 -u swift >/dev/null 2>&1
 
 #
 # We uninstall all openstack packages
@@ -65,6 +78,7 @@ yum -y erase openstack-glance \
 	openstack-trove-* \
 	openstack-sahara* \
 	openstack-manila* \
+	openstack-designate* \
 	mongodb-server \
 	mongodb \
 	haproxy \
@@ -87,6 +101,8 @@ yum -y erase openstack-glance \
 yum -y erase openstack-puppet-modules openstack-packstack-puppet
 yum -y erase qpid-cpp-server qpid-cpp-server-ssl qpid-cpp-client cyrus-sasl cyrus-sasl-md5 cyrus-sasl-plain
 yum -y erase rabbitmq-server
+yum -y erase bind
+rm -rf /var/named
 
 #
 # And clean up swift devices if we decided to do it in oir config file
@@ -125,6 +141,8 @@ userdel -f -r trove
 userdel -f -r qpidd
 userdel -f -r aodh
 userdel -f -r manila
+userdel -f -r designate
+userdel -f -r named
 
 echo "Erasing remaining files"
 
@@ -181,12 +199,15 @@ rm -fr /etc/glance \
 	/etc/manila \
 	/var/log/manila \
 	/var/lib/manila \
+	/etc/designate \
+	/var/lib/designate \
+	/var/log/designate \
 	/root/keystonerc_*
 
-rm -fr /var/log/{keystone,glance,nova,neutron,cinder,ceilometer,heat,sahara,trove,aodh,manila}*
-rm -fr /run/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh,manila}*
-rm -fr /run/lock/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh,manila}*
-rm -fr /root/.{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh,manila}client
+rm -fr /var/log/{keystone,glance,nova,neutron,cinder,ceilometer,heat,sahara,trove,aodh,manila,designate}*
+rm -fr /run/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh,manila,designate}*
+rm -fr /run/lock/{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh,manila,designate}*
+rm -fr /root/.{keystone,glance,nova,neutron,cinder,ceilometer,heat,trove,sahara,aodh,manila,designate}client
 
 rm -f /etc/cron.d/openstack-monitor-crontab
 rm -f /etc/cron.d/ceilometer-expirer-crontab

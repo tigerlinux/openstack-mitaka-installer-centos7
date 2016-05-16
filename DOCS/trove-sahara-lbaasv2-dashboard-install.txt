@@ -1,13 +1,13 @@
 The actual "openstack dashboard" packages in Ubuntu and Centos (for Mitaka release) does not contain the panels for the non-core projects. Also the "lbaasv2" panel is missing. Fortunatelly, those panels are very easy to install. Follow the next procedures in order to install them in the horizon machine (normally, the controller or all-in-one openstack server):
 
 
-INSTRUCTIONS FOR CENTOS 7 BASED OPENSTACK MITAKA DASHBOARD PANELS (TROVE, SAHARA AND LBAASV2):
+INSTRUCTIONS FOR CENTOS 7 BASED OPENSTACK MITAKA DASHBOARD PANELS (TROVE, SAHARA, DESIGNATE AND LBAASV2):
 
 Please execute the following commands logged with the "root" account:
 
 TROVE:
 
-yum -y install git
+yum -y install git python-pip
 
 cd /usr/local/src
 git clone https://github.com/openstack/trove-dashboard
@@ -25,7 +25,7 @@ systemctl restart httpd
 
 SAHARA:
 
-yum -y install git
+yum -y install git python-pip
 
 cd /usr/local/src
 git clone https://github.com/openstack/sahara-dashboard
@@ -43,7 +43,7 @@ systemctl restart httpd
 
 LBAASV2 Neutron Panels:
 
-yum -y install git
+yum -y install git python-pip
 
 cd /usr/local/src
 git clone https://github.com/openstack/neutron-lbaas-dashboard
@@ -59,13 +59,30 @@ python manage.py collectstatic --noinput
 systemctl restart httpd
 
 
-INSTRUCTIONS FOR UBUNTU 14.04LTS BASED OPENSTACK MITAKA DASHBOARD PANELS (TROVE, SAHARA AND LBAASV2):
+DESIGNATE:
+
+yum -y install git git python-pip
+
+cd /usr/local/src
+git clone https://github.com/openstack/designate-dashboard
+cd /usr/local/src/designate-dashboard
+git checkout stable/mitaka
+pip install -e ./
+cp /usr/local/src/designate-dashboard/designatedashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
+cd /usr/share/openstack-dashboard/
+python manage.py compress --force
+python manage.py collectstatic --noinput
+
+systemctl restart httpd
+
+
+INSTRUCTIONS FOR UBUNTU 14.04LTS BASED OPENSTACK MITAKA DASHBOARD PANELS (TROVE, SAHARA, DESIGNATE AND LBAASV2):
 
 Please execute the following commands logged with the "root" account:
 
 TROVE:
 
-apt-get install -y git
+apt-get install -y git python-pip
 
 cd /usr/local/src
 git clone https://github.com/openstack/trove-dashboard
@@ -83,7 +100,7 @@ python manage.py collectstatic --noinput
 
 SAHARA:
 
-apt-get install -y git
+apt-get install -y git python-pip
 
 cd /usr/local/src
 git clone https://github.com/openstack/sahara-dashboard
@@ -101,7 +118,7 @@ python manage.py collectstatic --noinput
 
 LBAASV2 Neutron Panels:
 
-apt-get install -y git
+apt-get install -y git python-pip
 
 cd /usr/local/src
 git clone https://github.com/openstack/neutron-lbaas-dashboard
@@ -110,6 +127,23 @@ git checkout stable/mitaka
 pip install -e ./
 cp /usr/local/src/neutron-lbaas-dashboard/neutron_lbaas_dashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
 
+cd /usr/share/openstack-dashboard/
+python manage.py compress --force
+python manage.py collectstatic --noinput
+
+/etc/init.d/apache2 restart
+
+
+DESIGNATE
+
+apt-get -y install git python-pip
+
+cd /usr/local/src
+git clone https://github.com/openstack/designate-dashboard
+cd /usr/local/src/designate-dashboard
+git checkout stable/mitaka
+pip install -e ./
+cp /usr/local/src/designate-dashboard/designatedashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
 cd /usr/share/openstack-dashboard/
 python manage.py compress --force
 python manage.py collectstatic --noinput
@@ -121,7 +155,7 @@ MANILA (Only if you are using Ubuntu 14.04 with ubuntu-cloud-archive):
 
 Surprisinglly, the Centos Manila packages comes with the Horizon plugin, but, ubuntu ones does not. If you install manila, and want to include the horizon plugin, please use the following commands:
 
-apt-get -y install git
+apt-get -y install git python-pip
 
 cd /usr/local/src
 git clone https://github.com/openstack/manila-ui
@@ -140,7 +174,7 @@ FINAL NOTES:
 
 Only intall those extra panels if you have the relevant components installed (mean, do not install them if you don't have trove, or sahara, or neutron installed).
 
-If your dashboard stop working properlly after installing those dashboard, edit the file /etc/openstack-dashboard/local_settings.py, and near the end of the file comment out the following line:
+If your dashboard stop working properlly after installing those dashboard's, edit the file /etc/openstack-dashboard/local_settings.py, and near the end of the file comment out the following line:
 
 # COMPRESS_OFFLINE = True
 

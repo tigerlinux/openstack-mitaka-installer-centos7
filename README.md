@@ -252,6 +252,17 @@ vgcreate cinder-volumes /dev/sde3
 ```
 
 
+### Designate
+
+EXPERIMENTAL: We are including "experimental support" for Designate (DNS as a Service) in our installer. By the moment we are only using BIND 9 backend. Our designate module install everything you need to fully operate designate with a BIND 9 backend and software installed in the server, and even gives you the option of integrate designate with nova and neutron for automatic record creation for floating IP's and Fixed IP's. If you read designate documentation, you can add other BIND 9 servers and control them with designate OpenStack service. Remember: This is still experimental.
+
+More information about designate:
+
+http://docs.openstack.org/releasenotes/designate/mitaka.html
+http://docs.openstack.org/developer/designate/
+
+
+
 ### Support Scripts installed with this solution
 
 This installer will place a OpenStack Services control script in the “/usr/local/bin” path:
