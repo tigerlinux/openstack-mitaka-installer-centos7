@@ -70,17 +70,19 @@ netmask 255.255.255.0
 broadcast 172.16.10.255
 
 
-For newer OpenVSwitch versions (liberty):
+For newer OpenVSwitch versions (liberty and newer):
 
 File: /etc/network/interfaces:
 
 # Integration Bridge
+auto br-int
 allow-ovs br-int
 iface br-int inet static
         ovs_type OVSBridge
         address 0.0.0.0
 
 # Main Bridge
+auto br-eth1
 allow-ovs br-eth1
 iface br-eth1 inet static
         address 0.0.0.0

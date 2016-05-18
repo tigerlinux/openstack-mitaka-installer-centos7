@@ -181,7 +181,7 @@ crudini --set /etc/glance/glance-api.conf keystone_authtoken username $glanceuse
 crudini --set /etc/glance/glance-api.conf keystone_authtoken password $glancepass
  
 crudini --set /etc/glance/glance-api.conf paste_deploy flavor keystone
- 
+crudini --set /etc/glance/glance-registry.conf paste_deploy flavor keystone 
  
 crudini --set /etc/glance/glance-registry.conf DEFAULT verbose False
 crudini --set /etc/glance/glance-registry.conf DEFAULT debug False

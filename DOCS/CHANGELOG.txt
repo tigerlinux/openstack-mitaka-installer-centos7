@@ -1,3 +1,9 @@
+1.2.1.el7 - May 17, 2016
+
+- Added missing config item in glance registry.
+- Updated documentation about trove postgresql bug,
+  vlans document and main README.
+
 1.2.0.el7 - May 16, 2016
 
 - Added "EXPERIMENTAL" support for Designate DNSaaS

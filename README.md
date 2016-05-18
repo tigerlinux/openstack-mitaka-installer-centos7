@@ -5,7 +5,7 @@ Caracas, Venezuela.
 
 ## Introduction
 
-This installer was made to automate the tasks of creating a virtualization infrastructure based on OpenStack. So far, There are two "flavors" for this installer: One for  Centos 7 and one for Ubuntu 14.04 LTS.
+This installer was made to automate the tasks of creating a virtualization infrastructure based on OpenStack. So far, There are 3 "flavors" for this installer: One for  Centos 7, one for Ubuntu 14.04 LTS and one for Ubuntu 16.04 LTS.
 
 All two versions produce a fully production-usable OpenStack. You can use this installer to make a single-node all-in-one OpenStack server, or a more complex design with controller and compute nodes.
 
@@ -439,9 +439,9 @@ Then again, we do not recommend to run those modules out of the main installer, 
 
 IMPORTANT NOTE: The installer disables Centos 7 SELINUX. We had found some bugs, specially when using PostgreSQL and with some scenarios with NOVA-API.
 
-#### Ubuntu 14.04 LTS:
+#### Ubuntu 14.04 LTS / 16.04 LTS:
 
-1. Install Ubuntu Server 14.04 LTS standard way and select as an additional package "OpenSSH Server". Install and configure the ntpd service. Also SSH. It is also recommended to use ntpdate.
+1. Install Ubuntu Server 14.04/16.04 LTS standard way and select as an additional package "OpenSSH Server". Install and configure the ntpd service. Also SSH. It is also recommended to use ntpdate.
 
 2. Install and configure OpenVSWitch (see "NOTES.txt").
 

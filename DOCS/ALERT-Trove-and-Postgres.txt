@@ -4,4 +4,10 @@ The Mitaka version of trove is broken with postgresql database backend, at least
 
 This is not the first time we encounter... "details"... when using postgresql as a database backend for OpenStack. If you plan to use trove, please meanwhile the bug is being addresed and corrected, stick with MySQL/MariaDB as a database backend. Note that this while this affects trove itself, it does not the datastores. You can use MySQL/MariaDB as config database backend, and still safelly use postgresql-based datastores.
 
+The BUG is referenced in the following url:
+
+https://bugs.launchpad.net/trove/+bug/1473226
+
+This is also affecting recent versions of MariaDB and MySQL, but, in those engines there is a workaround which is applied in the Ubuntu-16.04lts version of our Installer.
+
 END.-
