@@ -7,7 +7,7 @@ Caracas, Venezuela.
 
 This installer was made to automate the tasks of creating a virtualization infrastructure based on OpenStack. So far, There are 3 "flavors" for this installer: One for  Centos 7, one for Ubuntu 14.04 LTS and one for Ubuntu 16.04 LTS.
 
-All two versions produce a fully production-usable OpenStack. You can use this installer to make a single-node all-in-one OpenStack server, or a more complex design with controller and compute nodes.
+All versions produce a fully production-grade OpenStack installation. You can use this installer to make a single-node all-in-one OpenStack server, or a more complex design with controller and compute nodes. You can also use this installer (with small modifications made by yourself) in order to create a redundant infraestructure.
 
 In summary, this installer can produce an OpenStack virtualization service completely usable in production environments, however, remember that the "bugs" factor don't depend solely on us. From time to time OpenStack packages can bring us some bugs too. We are using rpm/deb packages from Ubuntu and Redhat repositories and they can have their own bugs. 
 
@@ -17,50 +17,54 @@ In summary, this installer can produce an OpenStack virtualization service compl
 
 * READ, READ, READ and after some rest, READ AGAIN!. *
 
-Read everything you can from * OpenStack * if you want to venture into the virtualization in the cloud World. If you do not like reading, then support yourself on someone who can do the reading. Please do not try to use this Installer without having any knowledge at hand. View file `NOTES.txt` to understand a little more about the knowledge which you should have.
+Read everything you can from **OpenStack** if you want to venture into the virtualization in the cloud World. If you do not like reading, then support yourself with someone who can do the reading and the understanding. Please do not try to use this Installer without having any knowledge at hand. View file `NOTES.txt` to understand a little more about the knowledge which you should have. In the `DOCS` directory you will find notes and other documentation usefull for you. Please read first, understand things, then act !.
 
-You can begin here: * http://docs.openstack.org *
+And about the OpenStack documentation, you can begin here: **http://docs.openstack.org**
 
-The big world of * OpenStack * includes several technologies from the world of Open-source and the world of networks that must be understood thoroughly before even attempting any installation of OpenStack, whether you use this installation tool or any other. In short, if you do not have the knowledge, do not even try. Gain the knowledge first, then proceed.
+The big world of **OpenStack** includes several technologies from the world of Open-source and the world of networks that must be understood thoroughly before even attempting any installation of OpenStack, whether you use this installation tool or any other. In short, if you do not have the knowledge, do not even try. Gain the knowledge first, then proceed.
 
 Before using the installer, you must prepare your server of servers. Again, in the file `NOTES.txt` you will find important points that you should understand before start an installation using this tool. The installer will make some validations, should yield negative results, will abort the process.
 
 ### Second: Edit the installer main configuration file.
 
-First thing to do: Copy the "main-config.rc" file from "sample-config" directory to "configs" directory. Without the file "main-config.rc" in the proper directory (configs), the installer will not work.
+First thing to do: Copy the **"main-config.rc"** file from **"sample-config"** directory to **"configs"** directory. Without the file "main-config.rc" in the proper directory (configs), the installer will not work.
 
-The installer has a central configuration file: `./configs/main-config.rc`. This file is well documented so * if you did your homework and studied * about * OpenStack *, you will know what to change there. There are very obvious things like passwords, IP addresses, modules to install and dns domains or domain names.
+The installer has a central configuration file: `./configs/main-config.rc`. This file is well documented so, if you did your homework and studied about OpenStack, you will know what to change there. There are very obvious things like passwords, IP addresses, modules to install and dns domains or domain names.
 
-In the version by default, the configuration file has selections modules to install what is known as an "all-in-one" (an OpenStack monolithic service with controller-compute capabilites). You can just change the IP with the one assigned to your server (please DO NOT use * localhost * and DO NOT use a Dynamic DHCP assigned IP).
+In the version by default, the configuration file has selections modules to install what is known as an **"all-in-one"** (an OpenStack monolithic service with controller-compute capabilites). You can just change the IP with the one assigned to your server (please DO NOT use *localhost* and DO NOT use a Dynamic DHCP assigned IP).
 
 Additionally, there are some modules that are in default "no":
 
-* Ceilometer *
-* Heat *
-* Swift *
-* Trove * 
-* Sahara *
-* SNMP *
+* Ceilometer
+* Heat
+* Swift
+* Trove 
+* Sahara
+* Manila
+* Designate
+* SNMP
 
-We recommend to activate swift install option "only If you are really going to use it". * Swift * alone is almost as extensive as OpenStack. Use if you REALLY know what you're doing and if you are REALLY going to use it. Remember the functions of all OpenStack modules:
+We recommend to activate swift install option "only If you are really going to use it". **Swift** alone is almost as extensive as OpenStack. Use if you REALLY know what you're doing and if you are REALLY going to use it. Remember the functions of all OpenStack modules:
 
-* Keystone: Identity Service *
-* Glance: Image Service *
-* Cinder: Block Storage Service *
-* Swift: Object Storage Service *
-* Neutron: Networking Service *
-* Nova: Compute Service *
-* Ceilometer: Metrics/Telemetry Service *
-* Aodh (installed along ceilometer): Alarming Service (needed if you want to create autoscaling groups with Heat Cloudformation) *
-* Heat: Orquestration/Cloudformation Service *
-* Trove: Database Service (DBaaS) *
-* Sahara: Data Processing Service (Big Data) *
+* Keystone: Identity Service
+* Glance: Image Service
+* Cinder: Block Storage Service
+* Swift: Object Storage Service
+* Neutron: Networking Service
+* Nova: Compute Service
+* Ceilometer: Metrics/Telemetry Service
+* Aodh (installed along ceilometer): Alarming Service (needed if you want to create autoscaling groups with Heat Cloudformation)
+* Heat: Orquestration/Cloudformation Service
+* Trove: Database Service (DBaaS)
+* Sahara: Data Processing Service (Big Data)
+* Manila: File Sharing as a Service
+* Designate: DNS as a Service
 
 The SNMP module installs monitoring variables useful if you want to monitor OpenStack with SNMP but does not install any monitoring application. The variables are described (if you install the support) in `/etc/snmp/snmpd.conf`.
 
-NOTE: Files for ZABBIX agent in the "Goodies" directory are also included.
+NOTE: Files for ZABBIX agent in the **"Goodies"** directory are also included.
 
-If you want to install an "all-in-one" openstack service, only change passwords, IP addresses and mail domains and *dhcp/dnsmasq* info appearing in the configuration file.
+If you want to install an **"all-in-one"** openstack service, only change passwords, IP addresses and mail domains and **dhcp/dnsmasq** info appearing in the configuration file.
 
 After updating the configuration file, run at the root of directory script the following command:
 
@@ -70,7 +74,7 @@ After updating the configuration file, run at the root of directory script the f
 
 The installer asks if you want to proceed (y/n).
 
-If you run the installer with the additional parameter * auto *, it will run automatically without asking you confirmation. Example:
+If you run the installer with the additional parameter * auto * , it will run automatically without asking you confirmation. Example:
 
 ```
 # ./main-installer.sh install auto
@@ -86,13 +90,17 @@ You can save all outputs produced by the installer using the tool `tee`. Example
 
 As mentioned before, you can use this installer for more complex designs. Example:
 
-* A single all-in-one monolithic server *
-* A cloud with a controller-compute and several compute nodes *
-* A cloud with a pure controller and several compute nodes *
+* A single all-in-one monolithic server
+* A cloud with a controller-compute and several compute nodes
+* A cloud with a pure controller and several compute nodes
+
+As mentioned initially, you can use this installer with few modifications if you want to create a redundante system (two controllers with High Availability). See the following link in order to see what is required from you for this task:
+
+**http://docs.openstack.org/ha-guide/**
 
 ### Controller node:
 
-If your controller node will include a compute service (controller + compute, or an all-in-one server), the following variable in the configuration file must be set to “no”:
+If your controller node will include a compute service (controller + compute, or an all-in-one server), the following variable in the configuration file must be set to "no":
 
 ```bash
 nova_without_compute="no"
@@ -142,14 +150,14 @@ vncserver_controller_address | spiceserver_controller_address = "Controller IP A
 If you use ceilometer, the same case applies:
 
 ```bash
-ceilometerhost = "Controller IP Address"
+ceilometerhost="Controller IP Address"
 ```
 
 For compute nodes, you must place the following variables with the IP in the compute node:
 
 ```bash
-neutron_computehost = "Compute Host IP Address"
-nova_computehost = "Compute Host IP Address "
+neutron_computehost="Compute Host IP Address"
+nova_computehost="Compute Host IP Address "
 ```
 
 ### Database Backend
@@ -157,14 +165,14 @@ nova_computehost = "Compute Host IP Address "
 The installer has the ability to install and configure the database service, and also it will create all the databases. This is completely controllable by the configuration file through the following variables:
 
 ```bash
-dbcreate = "yes"
-dbinstall = "yes"
-dbpopulate = "yes"
+dbcreate="yes"
+dbinstall="yes"
+dbpopulate="yes"
 ```
 
 With these three options set to "yes", the database software is installed, will be configured and databases will be created using all the information contained in the configuration file.
 
-> ** WARNING **: If you choose these options, you must ensure that there is
+> **WARNING**: If you choose these options, you must ensure that there is
 > NO database software previously installed or the process will fail.
 
 In our installation tool, you can choose to install and/or use between MySQL-based and PostgreSQL-based engines. For the MySQL-Based we really use MariaBD (if the installer installs the database engine and mysql is selected as backend). Please note that along openstack release history, some "strange things" had happened when postgresql is used as database backend. We really recommend using MariaDB (MySQL-Based) database backends in OpenStack production environments. At the end is up to you what backend to use, but be warned: If something gets broken with postgresql, it's not our fault !.
@@ -172,19 +180,19 @@ In our installation tool, you can choose to install and/or use between MySQL-bas
 If you prefer to “not install” any database software because you already have one installed somewhere else (a database farm), and also have the proper administrative access to the database engine, set the variables as follows:
 
 ```bash
-dbcreate = "yes"
-dbinstall = "no"
-dbpopulate = "yes"
+dbcreate="yes"
+dbinstall="no"
+dbpopulate="yes"
 ```
 
-With this, the database software will not be installed, but it's up to you (or your * DBA *) to ensure you have full administrative access to create and modify databases in the selected backend.
+With this, the database software will not be installed, but it's up to you (or your **DBA**) to ensure you have full administrative access to create and modify databases in the selected backend.
 
 If you do not want to install database software nor create databases (we assume that you already have previously created then in a farm or a separate server or even manually in the controller) set the three values "no":
 
 ```bash
-dbcreate = "no"
-dbinstall = "no"
-dbpopulate = "no"
+dbcreate="no"
+dbinstall="no"
+dbpopulate="no"
 ```
 
 In any case, always remember to properly set the database-control variables inside the installer configuration file.
@@ -192,27 +200,29 @@ In any case, always remember to properly set the database-control variables insi
 
 ### RPC Messaging backend (Message Broker)
 
-As part of the components to install and configure, the installer installs and configure the software for * AMQP * (the * Message Broker *). This step * IS * mandatory for a controller or * all-in-one * OpenStack server. If your server or servers have a message broker already installed, conflicts can occur that prevent the correct operation of the installation.
+As part of the components to install and configure, the installer installs and configure the software for **AMQP** (the **Message Broker**). This step *IS* mandatory for a controller or **all-in-one** OpenStack server. If your server or servers have a message broker already installed, conflicts can occur that prevent the correct operation of the installation.
 
 Again, the installer configuration file will control which AMPQ service to install and configure. In earlier releases (up to Liberty) we provided two options for AMPQ: RabbitMQ and Qpid. From Mitaka, we are allowing only RabbitMQ. In the practice, this is by far the best and most recommended option for OpenStack.
+
+Note something for your general knowledge: As recommended on most cloud implementations, **OpenStack** uses the "decoupled model", where, every component is running as microservices and agents. Those components communicate with each other by using a message broker. This is the right way to go in the Cloud.
 
 
 ### Console Manager (NOVNC / SPICEHTML5)
 
-Through a configurable option in the installer configuration file (consoleflavor), you can choose between NoVNC and SpiceHTML5. If you want to eventually use SSL for the Dashboard, please leave the default (novnc) as it easier to configure with SSL.
+Through a configurable option in the installer configuration file (**consoleflavor**), you can choose between NoVNC and SpiceHTML5. If you want to eventually use SSL for the Dashboard, please leave the default (novnc) as it easier to configure with SSL.
 
 
 ### Cloudformation and AutoScaling
 
-If you want to use Cloudformatio with AutoScaling, you MUST install both "heat" and "ceilometer". Also you need to include ceilometer alarming:
+If you want to use Cloudformatio with AutoScaling, you MUST install **"heat"**, **"ceilometer"** and **"aodh"** (**ceilometer alarms**):
 
 ```bash
-heatinstall=yes
-ceilometerinstall=yes
+heatinstall="yes"
+ceilometerinstall="yes"
 ceilometeralarms="yes"
 ```
 
-NOTE: From "OpenStack Release 13", ceilometer alarms is controlled by "aodh" module. This installer install and configure aodh along ceilometer components from inside ceilometer installation module.
+NOTE: From **"OpenStack Release 13"**, ceilometer alarms is controlled by **"aodh"** module. This installer install and configure aodh along ceilometer components from inside ceilometer installation module.
 
 
 ### Trove
@@ -262,13 +272,15 @@ http://docs.openstack.org/releasenotes/designate/mitaka.html
 http://docs.openstack.org/developer/designate/
 
 
+**VERY IMPORTANT NOTE ABOUT MANILA AND DESIGNATE**: Those components are still not completelly mature and are still evolving and improving a lot with each OpenStack release. We discovered some problems affecting Horizon in Ubuntu 16.04 if you install either manila or designate (or both) so be advised: Do not install them yet on production environments.
+
 
 ### Support Scripts installed with this solution
 
 This installer will place a OpenStack Services control script in the “/usr/local/bin” path:
 
 ```bash
-openstack-control.sh OPTION
+openstack-control.sh OPTION [component]
 ```
 
 The script uses the following options:
@@ -319,11 +331,12 @@ By the moment, we support the following modules:
 - nova
 - ceilometer
 - heat
+- trove
 - sahara
+- manila
+- designate
 
 NOTE: aodh (Ceilometer Alarming) is managed inside "ceilometer" option, so if you call "openstack-control.sh ACTION ceilometer", the "ACTION" (stop/start/enable/disable/etc) will be applied to both ceilometer and aodh services.
-
-Soon, we'll include other modules. By the moment our priorities are focused in manila, designate and murano.
 
 
 
@@ -353,7 +366,7 @@ This installer will place the following files in your OpenStack Nodes:
 
 This files include your "admin" credentials (user/password included) along the URL endpoints for Keystone Service. The file first file use the normal public endpoint at port tcp 5000. The second one, uses the full admin port 35357.
 
-Sourcing the *keystonerc_admin* file in your environment will allow you to perform normal administration tasks, not included the ones related to keystone advanced tasks. Sourcing the *keystonerc_fulladmin* file in your environment will give you "super cow god-like powers" over your cloud installation.
+Sourcing the "keystonerc_admin" file in your environment will allow you to perform normal administration tasks, not included the ones related to keystone advanced tasks. Sourcing the "keystonerc_fulladmin" file in your environment will give you "super cow god-like powers" over your cloud installation.
 
 Then:
 
@@ -394,14 +407,14 @@ Neutron dhcp-agent uses **DNSMASQ** for IP assignation to the VM's (instances). 
 ```
 
 There are commented examples in the file. Use these examples to pass options to
-different instances of dnsmasq created for each subnet where you select the option to use * dhcp *.
+different instances of dnsmasq created for each subnet where you select the option to use **dhcp**.
 
 Recommendation: Try to have a good **DNS** structure for your cloud.
 
 
 ### Installer modularization
 
-While the main setup process "* main-installer.sh *" is responsible for calling each module of each installer component, these modules are really independent of one another, to the point that they can be called sequentially and manually by you. Is not the common case, but can be done. The normal order of execution for each module is as follows (assuming that all components will be installed):
+While the main setup process "**main-installer.sh**" is responsible for calling each module of each installer component, these modules are really independent of one another, to the point that they can be called sequentially and manually by you. Is not the common case, but can be done. The normal order of execution for each module is as follows (assuming that all components will be installed):
 
 * requeriments.sh
 * messagebrokerinstall.sh
@@ -417,6 +430,10 @@ While the main setup process "* main-installer.sh *" is responsible for calling 
 * heatinstall.sh
 * troveinstall.sh
 * saharainstall.sh
+* manilainstall.sh
+* designateinstall.sh
+* manilainstall.sh
+* designateinstall.sh
 * snmpinstall.sh
 * horizoninstall.sh
 * postinstall.sh
@@ -435,7 +452,7 @@ Then again, we do not recommend to run those modules out of the main installer, 
 
 3. Install and configure OpenVSWitch (again, see "NOTES.txt").
 
-*WARNING*: OpenStack does not support MySQL lower than 5.5. See notes and take proper steps. If you use our installation tool in order to install database support, we will install MariaDB 5.5.x directly obtained from RDO repositories.
+**WARNING**: OpenStack does not support MySQL lower than 5.5. See notes and take proper steps. If you use our installation tool in order to install database support, we will install MariaDB 10 directly obtained from RDO repositories.
 
 IMPORTANT NOTE: The installer disables Centos 7 SELINUX. We had found some bugs, specially when using PostgreSQL and with some scenarios with NOVA-API.
 
@@ -497,7 +514,7 @@ NOTE: If you plan to use Swift just for learning/lab purposes, you always can cr
 
 ### Architecture:
 
-Whether you use Centos or Ubuntu, you must choose to use 64 bits (amd64 / x86_64). Do not try to install OpenStack in 32 bits. Repeat with us: "I will never ever try to install OpenStack on 32 bits O/S".
+Whether you use Centos or Ubuntu, you must choose to use 64 bits (amd64 / x86_64). Do not try to install OpenStack over 32 bits systems. Repeat after us: **"I will never ever try to install OpenStack on 32 bits O/S"**.
 
 
 ### NTP Service:
@@ -531,7 +548,7 @@ If you are using swift, create the partition on the third disk (/dev/sdc1) and m
 Make the installation indicating that the bridge Mapping (within main-config.rc) is:
 
 ```bash
-bridge_mappings = "public: br-eth2"
+bridge_mappings = "public:br-eth2"
 ```
 
 Copy the `main-config.rc` file from the sample-config directory to config directory.
@@ -574,9 +591,9 @@ WARNING: If you are not careful, could end up removing databases and losing anyt
 This is very convenient for a reinstall. If for some reason your OpenStack installation needs to be rebuilt without touching your databses, uninstall using dbinstall = "no" and when you are going to reinstall, place all database options in "no" to preserve both the engine and all its created databases:
 
 ```
-dbcreate = "no"
-dbinstall = "no"
-dbpopulate = "no"
+dbcreate="no"
+dbinstall="no"
+dbpopulate="no"
 ```
 
 If your system has multiple nodes (controller / compute) use the

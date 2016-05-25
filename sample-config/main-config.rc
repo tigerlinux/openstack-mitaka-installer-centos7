@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.2.1.el7 "Lynx Pardinus"
-# May 17, 2016
+# Version: 1.2.2.el7 "Lynx Pardinus"
+# May 25, 2016
 #
 
 #
@@ -608,11 +608,16 @@ metering_secret="fe01a6ed3e04c4be1cd8"
 # use such feature.
 ceilometeralarms="yes"
 #
+# If you install swift, and want to include swift metrics in ceilometer, set the following
+# variable to yes. Otherwise, leave it to "no"
+#
+swiftmetrics="no"
+#
 # Ceilometer Time To Live data (in seconds)
 # The following value controls the MongoDB data expiration in ceilometer
-# The proposed value here amounts for 90 days (3600x24x90)
+# The proposed value here amounts for 7 days (3600x24x7)
 #
-mongodbttl="7776000"
+mongodbttl="604800"
 
 
 

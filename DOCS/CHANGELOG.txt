@@ -1,3 +1,12 @@
+1.2.2.el7 - May 25, 2016
+
+- Added new config option "swiftmetrics" in
+  order to enable or disable ceilometer metrics
+  for swift.
+- Corrected a little typo on ceilometer install
+  module.
+- Updated main documentation.
+
 1.2.1.el7 - May 17, 2016
 
 - Added missing config item in glance registry.

@@ -287,7 +287,7 @@ crudini --set /etc/ceilometer/ceilometer.conf service_types glance image
 crudini --del /etc/ceilometer/ceilometer.conf service_types kwapi
 crudini --set /etc/ceilometer/ceilometer.conf service_types neutron_lbaas_version v2
 
-crudini --set /etc/ceilometer/ceilometer.conf oslo_messaging_notifications topic notifications
+crudini --set /etc/ceilometer/ceilometer.conf oslo_messaging_notifications topics notifications
 crudini --set /etc/ceilometer/ceilometer.conf oslo_messaging_notifications driver messagingv2
 crudini --set /etc/ceilometer/ceilometer.conf exchange_control heat_control_exchange heat
 crudini --set /etc/ceilometer/ceilometer.conf exchange_control glance_control_exchange glance
@@ -310,7 +310,7 @@ crudini --set /etc/ceilometer/ceilometer.conf publisher_notifier event_topic eve
 
 if [ $ceilometer_in_compute_node == "no" ]
 then
-	if [ $swiftinstall == "yes" ]
+	if [ $swiftinstall == "yes" ] && [ $swiftmetrics == "yes" ]
 	then
 		yum -y install python-ceilometermiddleware
                 crudini --set /etc/swift/proxy-server.conf filter:keystoneauth operator_roles "$keystoneadmintenant,$keystoneuserrole,$keystonereselleradminrole"
