@@ -223,6 +223,7 @@ rm -f /usr/local/bin/openstack-log-cleaner.sh
 rm -f /usr/local/bin/openstack-keystone-tokenflush.sh
 rm -f /usr/local/bin/openstack-vm-boot-start.sh
 rm -f /usr/local/bin/compute-and-instances-full-report.sh
+rm -f /usr/local/bin/instance-cpu-metrics-report.sh
 rm -f /etc/httpd/conf.d/openstack-dashboard.conf*
 rm -f /etc/httpd/conf.d/rootredirect.conf*
 rm -f /etc/cron.d/keystone-flush.crontab

@@ -650,26 +650,29 @@ echo ""
 echo "Done"
 echo ""
 
-echo ""
-echo "Provisioning NEUTRON database"
-echo ""
-
 #
-# Then we provision/update Neutron database
+# Then we provision/update Neutron database, if this is NOT a compute node
 #
 
-su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
-        --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
+if [ $neutron_in_compute_node == "no" ]
+then
+	echo ""
+	echo "Provisioning NEUTRON database"
+	echo ""
 
-#
-# Fix for BUG: https://bugs.launchpad.net/neutron/+bug/1463830
-#
-su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
-	--config-file /etc/neutron/plugin.ini --service fwaas upgrade head" neutron
+	su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+        	--config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
 
-# Just a little failsafe in order to ensure proper lbaas v2 installation:
-su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
-	--config-file /etc/neutron/plugin.ini --service lbaas upgrade head" neutron
+	#
+	# Fix for BUG: https://bugs.launchpad.net/neutron/+bug/1463830
+	#
+	su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+		--config-file /etc/neutron/plugin.ini --service fwaas upgrade head" neutron
+
+	# Just a little failsafe in order to ensure proper lbaas v2 installation:
+	su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+		--config-file /etc/neutron/plugin.ini --service lbaas upgrade head" neutron
+fi
 
 sync
 sleep 2

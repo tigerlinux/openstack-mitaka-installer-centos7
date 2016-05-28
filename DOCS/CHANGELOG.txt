@@ -1,3 +1,13 @@
+1.2.3.el7 - May 28, 2016
+
+- Minor modifications in neutron install module.
+- Added new script for cpu metrics report:
+  "instance-cpu-metrics-report.sh".
+  This script reports the min/max/avg cpu usage
+  for every active instance in your cloud. This
+  script requires ceilometer installed and fully
+  active.
+
 1.2.2.el7 - May 25, 2016
 
 - Added new config option "swiftmetrics" in

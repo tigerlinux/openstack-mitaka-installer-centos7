@@ -64,6 +64,7 @@ cp -v ./libs/openstack-control.sh /usr/local/bin/
 cp -v ./libs/openstack-log-cleaner.sh /usr/local/bin/
 cp -v ./libs/openstack-vm-boot-start.sh /usr/local/bin/
 cp -v ./libs/compute-and-instances-full-report.sh /usr/local/bin/
+cp -v ./libs/instance-cpu-metrics-report.sh /usr/local/bin/
 if [ $keystoneinstall == "yes" ]
 then
 	cp -v ./libs/openstack-keystone-tokenflush.sh /usr/local/bin/
