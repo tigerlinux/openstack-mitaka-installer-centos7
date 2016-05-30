@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.2.3.el7 "Lynx Pardinus"
-# May 28, 2016
+# Version: 1.2.4.el7 "Lynx Pardinus"
+# May 30, 2016
 #
 
 #
@@ -578,6 +578,12 @@ ceilometer_without_compute="no"
 #
 # This is the IP of the ceilometer node host or controller.
 ceilometerhost="192.168.50.13"
+aodhhost="192.168.50.13"
+# Only if you are using MySQL as DB backend. If for any chance, you have multiple
+# aodh hosts, put here the IP address of the extra hosts, space separated.
+# Normally, this is not necessary unless your mysql service access policies are very
+# strict.
+extraaodhhosts=""
 # Change the password and e-mail
 ceilometeruser="ceilometer"
 ceilometersvce="ceilometer"
