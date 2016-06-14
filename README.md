@@ -7,7 +7,7 @@ Caracas, Venezuela.
 
 This installer was made to automate the tasks of creating a virtualization infrastructure based on OpenStack. So far, There are 3 "flavors" for this installer: One for  Centos 7, one for Ubuntu 14.04 LTS and one for Ubuntu 16.04 LTS.
 
-All versions produce a fully production-grade OpenStack installation. You can use this installer to make a single-node all-in-one OpenStack server, or a more complex design with controller and compute nodes. You can also use this installer (with small modifications made by yourself) in order to create a redundant infraestructure.
+All versions produce a fully production-grade OpenStack installation. You can use this installer to make a single-node all-in-one OpenStack server, or a more complex design with controller and compute nodes. You can also use this installer (with small modifications made by yourself) in order to create a redundant infrastructure.
 
 In summary, this installer can produce an OpenStack virtualization service completely usable in production environments, however, remember that the "bugs" factor don't depend solely on us. From time to time OpenStack packages can bring us some bugs too. We are using rpm/deb packages from Ubuntu and Redhat repositories and they can have their own bugs. 
 
@@ -15,11 +15,11 @@ In summary, this installer can produce an OpenStack virtualization service compl
 
 ### First
 
-* READ, READ, READ and after some rest, READ AGAIN!. *
+* **READ, READ, READ and after some rest, READ AGAIN!.**
 
 Read everything you can from **OpenStack** if you want to venture into the virtualization in the cloud World. If you do not like reading, then support yourself with someone who can do the reading and the understanding. Please do not try to use this Installer without having any knowledge at hand. View file `NOTES.txt` to understand a little more about the knowledge which you should have. In the `DOCS` directory you will find notes and other documentation usefull for you. Please read first, understand things, then act !.
 
-And about the OpenStack documentation, you can begin here: **http://docs.openstack.org**
+And about the OpenStack documentation, you can begin here: [**OpenStack Documentation Site**](http://docs.openstack.org "OpenStack Documentation Site")
 
 The big world of **OpenStack** includes several technologies from the world of Open-source and the world of networks that must be understood thoroughly before even attempting any installation of OpenStack, whether you use this installation tool or any other. In short, if you do not have the knowledge, do not even try. Gain the knowledge first, then proceed.
 
@@ -35,32 +35,32 @@ In the version by default, the configuration file has selections modules to inst
 
 Additionally, there are some modules that are in default "no":
 
-* Ceilometer
-* Heat
-* Swift
-* Trove 
-* Sahara
-* Manila
-* Designate
-* SNMP
+* Ceilometer.
+* Heat.
+* Swift.
+* Trove.
+* Sahara.
+* Manila.
+* Designate.
+* SNMP.
 
 We recommend to activate swift install option "only If you are really going to use it". **Swift** alone is almost as extensive as OpenStack. Use if you REALLY know what you're doing and if you are REALLY going to use it. Remember the functions of all OpenStack modules:
 
-* Keystone: Identity Service
-* Glance: Image Service
-* Cinder: Block Storage Service
-* Swift: Object Storage Service
+* Keystone: Identity Service.
+* Glance: Image Service.
+* Cinder: Block Storage Service.
+* Swift: Object Storage Service.
 * Neutron: Networking Service
-* Nova: Compute Service
-* Ceilometer: Metrics/Telemetry Service
-* Aodh (installed along ceilometer): Alarming Service (needed if you want to create autoscaling groups with Heat Cloudformation)
-* Heat: Orquestration/Cloudformation Service
-* Trove: Database Service (DBaaS)
-* Sahara: Data Processing Service (Big Data)
-* Manila: File Sharing as a Service
-* Designate: DNS as a Service
+* Nova: Compute Service.
+* Ceilometer: Metrics/Telemetry Service.
+* Aodh (installed along ceilometer): Alarming Service (needed if you want to create autoscaling groups with Heat Cloudformation).
+* Heat: Orquestration/Cloudformation Service.
+* Trove: Database Service (DBaaS).
+* Sahara: Data Processing Service (Big Data).
+* Manila: File Sharing as a Service.
+* Designate: DNS as a Service.
 
-The SNMP module installs monitoring variables useful if you want to monitor OpenStack with SNMP but does not install any monitoring application. The variables are described (if you install the support) in `/etc/snmp/snmpd.conf`.
+The SNMP module installs usefull monitoring variables you can use in order to monitor OpenStack with SNMP but does not install any monitoring application. The variables are described (if you install the support) in `/etc/snmp/snmpd.conf`.
 
 NOTE: Files for ZABBIX agent in the **"Goodies"** directory are also included.
 
@@ -68,16 +68,16 @@ If you want to install an **"all-in-one"** openstack service, only change passwo
 
 After updating the configuration file, run at the root of directory script the following command:
 
-```
-# ./main-installer.sh install
+```bash
+./main-installer.sh install
 ```
 
 The installer asks if you want to proceed (y/n).
 
 If you run the installer with the additional parameter * auto * , it will run automatically without asking you confirmation. Example:
 
-```
-# ./main-installer.sh install auto
+```bash
+./main-installer.sh install auto
 ```
 
 You can save all outputs produced by the installer using the tool `tee`. Example:
@@ -198,6 +198,41 @@ dbpopulate="no"
 In any case, always remember to properly set the database-control variables inside the installer configuration file.
 
 
+### Default domain, admin user and password.
+
+By default, the default domain is "**default**", the admin user is "**admin**", and it's password is the same you choose in the main-config.rc file when setting the variable "**keystoneadminpass**". In our default config file, the variable is set to the password "P@ssw0rd":
+
+```bash
+keystoneadminpass="P@ssw0rd"
+```
+
+Whatever you set in the "keystoneadminpass" variable, will be your "admin" password !.
+
+
+### Protected config options.
+
+Please note something. In our **main-config.rc** file you'll find this:
+
+```bash
+# PROTECTED KEYSTONE CONFIG OPTIONS - DO NOT CHANGE !!!
+#
+keystoneadminuser="admin"
+keystoneservicename="keystone"
+keystoneadmintenant="admin"
+keystoneservicestenant="services"
+keystonememberrole="_member_"
+keystoneuserrole="user"
+keystonedomain="default"
+keystonereselleradminrole="ResellerAdmin"
+keystone_admin_rc_file="/root/keystonerc_admin"
+keystone_fulladmin_rc_file="/root/keystonerc_fulladmin"
+#
+# END OF PROTECTED KEYSTONE CONFIG OPTIONS 
+```
+
+Those settings are protected for a reason: If you change them, you'll break the OpenStack security policies, and this installation tool !. NEVER EVER Change those options, or your OpenStack installation will break !.
+
+
 ### RPC Messaging backend (Message Broker)
 
 As part of the components to install and configure, the installer installs and configure the software for **AMQP** (the **Message Broker**). This step *IS* mandatory for a controller or **all-in-one** OpenStack server. If your server or servers have a message broker already installed, conflicts can occur that prevent the correct operation of the installation.
@@ -268,11 +303,11 @@ EXPERIMENTAL: We are including "experimental support" for Designate (DNS as a Se
 
 More information about designate:
 
-http://docs.openstack.org/releasenotes/designate/mitaka.html
-http://docs.openstack.org/developer/designate/
+* http://docs.openstack.org/releasenotes/designate/mitaka.html
+* http://docs.openstack.org/developer/designate/
 
 
-**VERY IMPORTANT NOTE ABOUT MANILA AND DESIGNATE**: Those components are still not completelly mature and are still evolving and improving a lot with each OpenStack release. We discovered some problems affecting Horizon in Ubuntu 16.04 if you install either manila or designate (or both) so be advised: Do not install them yet on production environments.
+**VERY IMPORTANT NOTE ABOUT MANILA AND DESIGNATE**: Those components are still not completelly mature and are still evolving and improving a lot with each OpenStack release. We discovered some problems affecting Horizon in Ubuntu 16.04 if you install either manila or designate (or both) so be advised: Do not install them yet on production environments if you are using Ubuntu 16.04LTS.
 
 
 ### Support Scripts installed with this solution
@@ -323,6 +358,7 @@ Samples:
 ```
 
 By the moment, we support the following modules:
+
 - keystone
 - swift
 - glance
@@ -339,7 +375,6 @@ By the moment, we support the following modules:
 NOTE: aodh (Ceilometer Alarming) is managed inside "ceilometer" option, so if you call "openstack-control.sh ACTION ceilometer", the "ACTION" (stop/start/enable/disable/etc) will be applied to both ceilometer and aodh services.
 
 
-
 ```bash
 openstack-log-cleaner.sh
 ```
@@ -352,7 +387,13 @@ This script is called during the final phase of installation to clean all logs b
 compute-and-instances-full-report.sh
 ```
 
-This script is also copied by the installer onto /usr/local/bin directory. The function of this script is give a report of all compute nodes in the openstack cloud and it's related virtual machines (instances) including the IP or IP's assigned to the instances.
+This script is copied by the installer onto /usr/local/bin directory. The function of this script is give a report of all compute nodes in the openstack cloud and it's related virtual machines (instances) including the IP or IP's assigned to the instances.
+
+```bash
+instance-cpu-metrics-report.sh
+```
+
+This script is copied by the installer onto /usr/local/bin directory. The function of this script is give a report of all instances and their CPU usage (in percents). Please note that this script requires Ceilometer installed in order to function.
 
 
 ### Keystone Environment Admin Variables
@@ -364,7 +405,7 @@ This installer will place the following files in your OpenStack Nodes:
 /root/keystonerc_fulladmin
 ```
 
-This files include your "admin" credentials (user/password included) along the URL endpoints for Keystone Service. The file first file use the normal public endpoint at port tcp 5000. The second one, uses the full admin port 35357.
+Those files include your "admin" credentials (user/password included) along the URL endpoints for Keystone Service. The file first file use the normal public endpoint at port 5000. The second one, uses the full admin port 35357.
 
 Sourcing the "keystonerc_admin" file in your environment will allow you to perform normal administration tasks, not included the ones related to keystone advanced tasks. Sourcing the "keystonerc_fulladmin" file in your environment will give you "super cow god-like powers" over your cloud installation.
 
@@ -439,7 +480,7 @@ While the main setup process "**main-installer.sh**" is responsible for calling 
 * postinstall.sh
 
 
-Then again, we do not recommend to run those modules out of the main installer, unless of course you know exactly what are you doing.
+Then again, we do not recommend to run those modules out of the main installer, unless of course you know exactly what you are doing.
 
 
 ### RECOMMENDATIONS FOR INSTALLATION IN CENTOS AND UBUNTU SERVER.
@@ -514,7 +555,7 @@ NOTE: If you plan to use Swift just for learning/lab purposes, you always can cr
 
 ### Architecture:
 
-Whether you use Centos or Ubuntu, you must choose to use 64 bits (amd64 / x86_64). Do not try to install OpenStack over 32 bits systems. Repeat after us: **"I will never ever try to install OpenStack on 32 bits O/S"**.
+Whether you use Centos or Ubuntu, you must choose to use 64 bits (amd64 / x86_64). Do not try to install OpenStack over 32 bits systems. Repeat after us: **"I will never ever try to install OpenStack on a 32 bits O/S"**.
 
 
 ### NTP Service:
@@ -559,10 +600,7 @@ Run the installer.
 
 enjoy:-)
 
-You can enter the web server via the interface 192.168.56.x for
-run OpenStack management tasks. Create the subnet in the range
-of eth2 (192.168.57.0/24) and may enter the VM's OpenStack from
-real machine that will interface 192.168.57.1.
+You can enter the web server via the interface 192.168.56.x in order to run OpenStack management tasks. Create the subnet in the range of eth2 (192.168.57.0/24) and may enter the VM's OpenStack from real machine that will interface 192.168.57.1.
 
 From outside VirtualBox you can enter to the Horizon web Interface by using the vboxnet0 assigned IP (192.168.56.2) and to the OpenStack VM instances running inside vboxnet1 network (192.168.57.0/24).
 
@@ -571,13 +609,13 @@ From outside VirtualBox you can enter to the Horizon web Interface by using the 
 
 The main script also has a parameter used to completely uninstall OpenStack:
 
-```
-# ./main-installer.sh uninstall
+```bash
+./main-installer.sh uninstall
 ```
 or
 
-```
-# ./main-installer.sh uninstall auto
+```bash
+./main-installer.sh uninstall auto
 ```
 
 The first way to call the uninstall process asks you "y/n" for continue or abort, but if you called the script with the extra "auto" setting, it will run without asking anything from you and basically will erase all that it previously installed.
@@ -590,7 +628,7 @@ WARNING: If you are not careful, could end up removing databases and losing anyt
 
 This is very convenient for a reinstall. If for some reason your OpenStack installation needs to be rebuilt without touching your databses, uninstall using dbinstall = "no" and when you are going to reinstall, place all database options in "no" to preserve both the engine and all its created databases:
 
-```
+```bash
 dbcreate="no"
 dbinstall="no"
 dbpopulate="no"

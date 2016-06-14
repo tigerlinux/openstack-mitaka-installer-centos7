@@ -148,43 +148,62 @@ crudini --set /etc/heat/heat.conf heat_api bind_port 8004
 crudini --set /etc/heat/heat.conf keystone_authtoken project_name $keystoneservicestenant
 crudini --set /etc/heat/heat.conf keystone_authtoken username $heatuser
 crudini --set /etc/heat/heat.conf keystone_authtoken password $heatpass
-crudini --set /etc/heat/heat.conf keystone_authtoken auth_uri http://$keystonehost:5000
+# crudini --set /etc/heat/heat.conf keystone_authtoken auth_uri http://$keystonehost:5000
 crudini --set /etc/heat/heat.conf keystone_authtoken auth_url http://$keystonehost:35357
 crudini --set /etc/heat/heat.conf keystone_authtoken project_domain_name $keystonedomain
 crudini --set /etc/heat/heat.conf keystone_authtoken user_domain_name $keystonedomain
 crudini --set /etc/heat/heat.conf keystone_authtoken signing_dir /tmp/keystone-signing-heat
-crudini --set /etc/heat/heat.conf keystone_authtoken auth_version v3
+# crudini --set /etc/heat/heat.conf keystone_authtoken auth_version v3
 crudini --set /etc/heat/heat.conf keystone_authtoken auth_type password
-crudini --set /etc/heat/heat.conf keystone_authtoken auth_section keystone_authtoken
-crudini --set /etc/heat/heat.conf keystone_authtoken memcached_servers $keystonehost:11211
+# crudini --set /etc/heat/heat.conf keystone_authtoken auth_section keystone_authtoken
+# crudini --set /etc/heat/heat.conf keystone_authtoken memcached_servers $keystonehost:11211
 #
-crudini --set /etc/heat/heat.conf keystone_authtoken identity_uri http://$keystonehost:35357
-crudini --set /etc/heat/heat.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
-crudini --set /etc/heat/heat.conf keystone_authtoken admin_user $heatuser
-crudini --set /etc/heat/heat.conf keystone_authtoken admin_password $heatpass
+# crudini --set /etc/heat/heat.conf keystone_authtoken identity_uri http://$keystonehost:35357
+# crudini --set /etc/heat/heat.conf keystone_authtoken admin_tenant_name $keystoneservicestenant
+# crudini --set /etc/heat/heat.conf keystone_authtoken admin_user $heatuser
+# crudini --set /etc/heat/heat.conf keystone_authtoken admin_password $heatpass
+#
+crudini --del /etc/heat/heat.conf keystone_authtoken auth_uri
+crudini --del /etc/heat/heat.conf keystone_authtoken auth_version
+crudini --del /etc/heat/heat.conf keystone_authtoken auth_section
+crudini --del /etc/heat/heat.conf keystone_authtoken memcached_servers
+crudini --del /etc/heat/heat.conf keystone_authtoken identity_uri
+crudini --del /etc/heat/heat.conf keystone_authtoken admin_tenant_name
+crudini --del /etc/heat/heat.conf keystone_authtoken admin_user
+crudini --del /etc/heat/heat.conf keystone_authtoken admin_password
 #
 crudini --del /etc/heat/heat.conf keystone_authtoken auth_host
 crudini --del /etc/heat/heat.conf keystone_authtoken auth_port
 crudini --del /etc/heat/heat.conf keystone_authtoken auth_protocol
 #
-crudini --set /etc/heat/heat.conf trustee project_name $keystoneservicestenant
+# crudini --set /etc/heat/heat.conf trustee project_name $keystoneservicestenant
 crudini --set /etc/heat/heat.conf trustee username $heatuser
 crudini --set /etc/heat/heat.conf trustee password $heatpass
-crudini --set /etc/heat/heat.conf trustee auth_uri http://$keystonehost:5000
+# crudini --set /etc/heat/heat.conf trustee auth_uri http://$keystonehost:5000
 crudini --set /etc/heat/heat.conf trustee auth_url http://$keystonehost:35357
 crudini --set /etc/heat/heat.conf trustee project_domain_name $keystonedomain
 crudini --set /etc/heat/heat.conf trustee user_domain_name $keystonedomain
-crudini --set /etc/heat/heat.conf trustee signing_dir /tmp/keystone-signing-heat
-crudini --set /etc/heat/heat.conf trustee auth_version v3
+# crudini --set /etc/heat/heat.conf trustee signing_dir /tmp/keystone-signing-heat
+# crudini --set /etc/heat/heat.conf trustee auth_version v3
 crudini --set /etc/heat/heat.conf trustee auth_plugin password
 #
-crudini --set /etc/heat/heat.conf trustee identity_uri http://$keystonehost:35357
-crudini --set /etc/heat/heat.conf trustee admin_tenant_name $keystoneservicestenant
-crudini --set /etc/heat/heat.conf trustee admin_user $heatuser
-crudini --set /etc/heat/heat.conf trustee admin_password $heatpass
+# crudini --set /etc/heat/heat.conf trustee identity_uri http://$keystonehost:35357
+# crudini --set /etc/heat/heat.conf trustee admin_tenant_name $keystoneservicestenant
+# crudini --set /etc/heat/heat.conf trustee admin_user $heatuser
+# crudini --set /etc/heat/heat.conf trustee admin_password $heatpass
+#
+crudini --del /etc/heat/heat.conf trustee project_name
+crudini --del /etc/heat/heat.conf trustee auth_uri
+crudini --del /etc/heat/heat.conf trustee signing_dir
+crudini --del /etc/heat/heat.conf trustee auth_version
+crudini --del /etc/heat/heat.conf trustee identity_uri
+crudini --del /etc/heat/heat.conf trustee admin_tenant_name
+crudini --del /etc/heat/heat.conf trustee admin_user
+crudini --del /etc/heat/heat.conf trustee admin_password
 #
 crudini --set /etc/heat/heat.conf clients_keystone auth_uri http://$keystonehost:35357
-crudini --set /etc/heat/heat.conf ec2authtoken auth_uri http://$keystonehost:5000
+crudini --set /etc/heat/heat.conf ec2authtoken auth_uri http://$keystonehost:5000/v2.0/ec2tokens
+crudini --set /etc/heat/heat.conf clients_heat url "http://$heathost:8004/v1/%(tenant_id)s"
 #
 # End of Keystone Auth Section
 #

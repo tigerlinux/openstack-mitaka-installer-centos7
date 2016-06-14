@@ -383,7 +383,6 @@ then
 		crudini --set /etc/aodh/aodh.conf keystone_authtoken admin_user $aodhuser
 		crudini --set /etc/aodh/aodh.conf keystone_authtoken admin_password $aodhpass
 		crudini --set /etc/aodh/aodh.conf keystone_authtoken auth_type password
-		# crudini --set /etc/aodh/aodh.conf keystone_authtoken auth_section keystone_authtoken
 		crudini --set /etc/aodh/aodh.conf keystone_authtoken username $aodhuser
 		crudini --set /etc/aodh/aodh.conf keystone_authtoken password $aodhpass
 		crudini --set /etc/aodh/aodh.conf keystone_authtoken project_domain_name $keystonedomain
@@ -394,21 +393,22 @@ then
 		crudini --set /etc/aodh/aodh.conf keystone_authtoken signing_dir "/var/lib/aodh/tmp-signing"
 		crudini --set /etc/aodh/aodh.conf keystone_authtoken auth_version v3
 		crudini --set /etc/aodh/aodh.conf keystone_authtoken memcached_servers $keystonehost:11211
-		crudini --set /etc/aodh/aodh.conf service_credentials os_username $aodhuser
-		crudini --set /etc/aodh/aodh.conf service_credentials os_password $aodhpass
-		crudini --set /etc/aodh/aodh.conf service_credentials os_tenant_name $keystoneservicestenant
-		# crudini --set /etc/aodh/aodh.conf service_credentials os_auth_url http://$keystonehost:5000/v2.0
-		crudini --set /etc/aodh/aodh.conf service_credentials os_auth_url http://$keystonehost:5000/v3
+		# crudini --set /etc/aodh/aodh.conf service_credentials os_username $aodhuser
+		# crudini --set /etc/aodh/aodh.conf service_credentials os_password $aodhpass
+		# crudini --set /etc/aodh/aodh.conf service_credentials os_tenant_name $keystoneservicestenant
+		# crudini --set /etc/aodh/aodh.conf service_credentials os_auth_url http://$keystonehost:5000/v3
 		crudini --set /etc/aodh/aodh.conf service_credentials region_name $endpointsregion
 		crudini --set /etc/aodh/aodh.conf service_credentials interface internalURL
-		# crudini --set /etc/aodh/aodh.conf service_credentials auth_section keystone_authtoken
 		crudini --set /etc/aodh/aodh.conf service_credentials auth_type password
-		crudini --set /etc/aodh/aodh.conf service_credentials username $ceilometeruser
-		crudini --set /etc/aodh/aodh.conf service_credentials password $ceilometerpass
+		crudini --set /etc/aodh/aodh.conf service_credentials username $aodhuser
+		crudini --set /etc/aodh/aodh.conf service_credentials password $aodhpass
 		crudini --set /etc/aodh/aodh.conf service_credentials auth_url http://$keystonehost:5000/v3
 		crudini --set /etc/aodh/aodh.conf service_credentials project_domain_name $keystonedomain
 		crudini --set /etc/aodh/aodh.conf service_credentials user_domain_name $keystonedomain
 		crudini --set /etc/aodh/aodh.conf service_credentials project_name $keystoneservicestenant
+		crudini --set /etc/aodh/aodh.conf api port 8042
+		crudini --set /etc/aodh/aodh.conf api host 0.0.0.0
+		crudini --set /etc/aodh/aodh.conf api paste_config api_paste.ini
 		case $brokerflavor in
 		"qpid")
 			crudini --set /etc/aodh/aodh.conf DEFAULT rpc_backend qpid

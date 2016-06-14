@@ -1,3 +1,9 @@
+1.2.5.el7 - June 14, 2016
+
+- Changes in aodh and heat install modules aimed
+  to allow proper autoscaling implementation.
+- Minor changes in main README.
+
 1.2.4.el7 - May 30, 2016
 
 - Bugfix: Added missing aodh config items in
