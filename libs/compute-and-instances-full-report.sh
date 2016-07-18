@@ -23,7 +23,8 @@ source $mykeystonefile
 #
 
 # hypervisorlist=`nova hypervisor-list|grep \||grep -v ID|awk '{print $4}'|cut -d. -f1`
-hypervisorlist=`nova hypervisor-list|grep \||grep -v ID|awk '{print $4}'`
+# hypervisorlist=`nova hypervisor-list|grep \||grep -v ID|awk '{print $4}'`
+hypervisorlist=`openstack hypervisor list|grep \||grep -v ID|awk '{print $4}'`
 
 #
 # Then, we "loop" all the compute nodes and list it's configured instances
@@ -35,6 +36,7 @@ do
 	echo ""
 	echo "INSTANCES CONFIGURED AT COMPUTE NODE: $compute"
 	echo ""
-	nova list --all-tenants --host $compute
+	# nova list --all-tenants --host $compute
+	openstack server list --all-projects --host $compute
 	echo ""
 done

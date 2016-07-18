@@ -64,7 +64,7 @@ then
 		yum -y install mariadb-galera-server mariadb-galera-common mariadb-galera galera
 		yum -y install openstack-utils
 		crudini --set /etc/my.cnf.d/server.cnf mysqld max_allowed_packet 256M
-		sed -i -r 's/^bind-address.*=.*0.0.0.0/bind-address=0.0.0.0\nmax_connections=1000/' /etc/my.cnf.d/galera.cnf
+		sed -i -r "s/^bind-address.*=.*0.0.0.0/bind-address=0.0.0.0\nmax_connections=$dbmaxcons/" /etc/my.cnf.d/galera.cnf
 		systemctl enable mariadb.service
 		systemctl start mariadb.service
 		/usr/bin/mysqladmin -u $mysqldbadm password $mysqldbpassword > /dev/null 2>&1
@@ -93,7 +93,7 @@ then
 		echo "port = 5432" >> /var/lib/pgsql/data/postgresql.conf
 		cat ./libs/pg_hba.conf > /var/lib/pgsql/data/pg_hba.conf
 		echo "host all all 0.0.0.0/0 md5" >> /var/lib/pgsql/data/pg_hba.conf
-		sed -r -i 's/^max_connections.*/max_connections\ =\ 1000/' /var/lib/pgsql/data/postgresql.conf
+		sed -r -i "s/^max_connections.*/max_connections\ =\ $dbmaxcons/" /var/lib/pgsql/data/postgresql.conf
 		service postgresql stop
 		service postgresql start
 		sleep 5

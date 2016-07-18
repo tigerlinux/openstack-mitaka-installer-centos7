@@ -5,8 +5,8 @@
 # E-Mail: TigerLinux@Gmail.com
 #
 # Main Configuration
-# Version: 1.2.5.el7 "Lynx Pardinus"
-# June 14, 2016
+# Version: 1.2.6.el7 "Lynx Pardinus"
+# July 18, 2016
 #
 
 #
@@ -51,6 +51,13 @@ dbpopulate="yes"
 #
 # Here you define the database backend server IP address. You can use an IP or a FQDN:
 dbbackendhost="192.168.50.13"
+#
+# DB Max connections. This parameter needs to be adjusted according to your available
+# cores in your controller
+# 64 cores = 2000
+# 128 cores = 4000
+# 256 cores = 8000
+dbmaxcons="1000"
 
 #
 # MESSAGE BROKER SECTION

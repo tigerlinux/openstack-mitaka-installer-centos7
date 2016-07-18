@@ -1,3 +1,16 @@
+1.2.6.el7 - July 18, 2016
+
+- Changes on "compute-and-instances" script in
+  order to use "openstack" cli instead of nova
+  cli.
+- Minor changes and additions in documentation.
+- Added "dbmaxcons" config option in main config
+  and database module. This option change the
+  "max_connections" setting on MariaDB and
+  postgreSQL (when installed by our installer)
+  in order to allow more connections on contro-
+  llers with a lot of cores.
+
 1.2.5.el7 - June 14, 2016
 
 - Changes in aodh and heat install modules aimed
