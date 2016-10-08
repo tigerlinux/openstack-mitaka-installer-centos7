@@ -1,3 +1,14 @@
+1.2.7.el7 - October 08, 2016
+
+- Changes on trove install module:
+  * Keystone AUTH reverted to V2.0
+  * Changed nova access to main admin
+	user instead of nova user.
+  * Addded tenant_id for admin access
+    to nova in trove taskmanager.
+- Corrected documentation about LBaaS
+  horizon panel installation.
+
 1.2.6.el7 - July 18, 2016
 
 - Changes on "compute-and-instances" script in
