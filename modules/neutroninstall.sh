@@ -88,7 +88,8 @@ yum install -y openstack-neutron \
 
 if [ $vpnaasinstall == "yes" ]
 then
-	yum install -y openstack-neutron-vpnaas openswan
+	yum install -y openstack-neutron-vpnaas \
+		strongswan strongswan-libipsec strongswan-charon-nm strongswan-tnc-imcvs
 fi
 
 if [ $neutronmetering == "yes" ]
@@ -333,9 +334,12 @@ then
 	crudini --set /etc/neutron/vpn_agent.ini DEFAULT ovs_use_veth True
 	crudini --set /etc/neutron/vpn_agent.ini DEFAULT use_namespaces True
 	crudini --set /etc/neutron/vpn_agent.ini DEFAULT external_network_bridge ""
-	crudini --set /etc/neutron/vpn_agent.ini vpnagent vpn_device_driver "neutron_vpnaas.services.vpn.device_drivers.ipsec.OpenSwanDriver"
+	# crudini --set /etc/neutron/vpn_agent.ini vpnagent vpn_device_driver "neutron_vpnaas.services.vpn.device_drivers.ipsec.OpenSwanDriver"
+	crudini --set /etc/neutron/vpn_agent.ini vpnagent vpn_device_driver "neutron_vpnaas.services.vpn.device_drivers.strongswan_ipsec.StrongSwanDriver"
 	crudini --set /etc/neutron/vpn_agent.ini ipsec ipsec_status_check_interval 60
-	crudini --set /etc/neutron/neutron_vpnaas.conf service_providers service_provider "VPN:openswan:neutron.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default"
+	# crudini --set /etc/neutron/neutron_vpnaas.conf service_providers service_provider "VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default"
+	crudini --set /etc/neutron/neutron_vpnaas.conf service_providers service_provider "VPN:strongswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default"
+	ln -s /etc/strongswan/strongswan.d /etc/strongswan.d
 fi
  
 if [ $neutronmetering == "yes" ]
@@ -672,6 +676,10 @@ then
 	# Just a little failsafe in order to ensure proper lbaas v2 installation:
 	su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
 		--config-file /etc/neutron/plugin.ini --service lbaas upgrade head" neutron
+
+	# Same for vpnaas
+	su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+                --config-file /etc/neutron/plugin.ini --service vpnaas upgrade head" neutron
 fi
 
 sync
@@ -725,6 +733,8 @@ then
 
 	if [ $vpnaasinstall == "yes" ]
 	then
+		systemctl stop neutron-l3-agent
+		systemctl disable neutron-l3-agent
 		systemctl stop neutron-vpn-agent
 		systemctl disable neutron-vpn-agent
 	fi

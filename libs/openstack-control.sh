@@ -82,7 +82,6 @@ then
 			neutron-ovs-cleanup
 			neutron-openvswitch-agent
 			neutron-metadata-agent
-			neutron-l3-agent
 			neutron-dhcp-agent
 			neutron-lbaasv2-agent
 			neutron-vpn-agent
